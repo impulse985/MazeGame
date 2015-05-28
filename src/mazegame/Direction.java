@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 Jeff Thompson.
+ * Copyright 2015 Jeff.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,15 +23,25 @@
  */
 package mazegame;
 
-import mazegame.gui.MazeFrame;
-
 /**
  *
  * @author Jeff
  */
-public class MazeGame {
-    public static void main(String[] args) {
-		Maze m = new Maze(30,30);
-	    MazeFrame mf = new MazeFrame(m);
-    }
+public enum Direction {
+	NORTH, EAST, SOUTH, WEST;
+	
+	public Direction opposite(Direction i){
+		switch(i){
+			case NORTH:
+				return SOUTH;
+			case SOUTH:
+				return NORTH;
+			case WEST:
+				return EAST;
+			case EAST:
+				return WEST;
+			default:
+				return null;
+		}
+	}
 }

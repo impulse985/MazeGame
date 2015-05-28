@@ -21,17 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package mazegame;
+package mazegame.gui;
 
-import mazegame.gui.MazeFrame;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import javax.swing.JFrame;
+import mazegame.Maze;
 
 /**
  *
  * @author Jeff
  */
-public class MazeGame {
-    public static void main(String[] args) {
-		Maze m = new Maze(30,30);
-	    MazeFrame mf = new MazeFrame(m);
-    }
+public class MazeFrame extends JFrame {
+	MazePanel panel;
+	public MazeFrame(Maze m) {
+		panel = new MazePanel(m);
+		this.setContentPane(panel);
+		
+		this.setMinimumSize(new Dimension(300,300));
+		this.setMaximumSize(Toolkit.getDefaultToolkit().getScreenSize());
+		this.pack();
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setVisible(true);
+	}	
 }
