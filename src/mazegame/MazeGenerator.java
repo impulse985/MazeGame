@@ -38,7 +38,7 @@ public class MazeGenerator {
 		Random rand = new Random();
 		Stack<Cell> s = new Stack();
 		
-		Cell currCell = m.grid[rand.nextInt(m.getRows())][rand.nextInt(m.getCols())];
+		Cell currCell = m.getCell(rand.nextInt(m.getRows()),rand.nextInt(m.getCols()));
 		do {
 			Map<Direction, Cell> neighbors = currCell.getNeighbors();
 			Direction dir = Direction.values()[rand.nextInt(4)];
@@ -51,7 +51,6 @@ public class MazeGenerator {
 			}
 			else {
 				currCell.breakWall(dir);
-				System.out.println(currCell.posX+","+currCell.posY+" broke "+dir.toString()+" wall");
 				s.push(currCell);
 				currCell = currCell.getNeighbor(dir);
 			}

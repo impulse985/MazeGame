@@ -28,6 +28,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
 import mazegame.Maze;
+import mazegame.MazeGame;
 
 /**
  *
@@ -40,6 +41,22 @@ public class MazePanel extends JPanel {
 		maze = m;
 		setPreferredSize(new Dimension(m.getRows()*Maze.CELL_WIDTH+1,
 				m.getCols()*Maze.CELL_HEIGHT+1));
+	}
+	
+	public void restartMaze(){
+		maze.restart();
+	}
+	
+	public void newMaze(){
+		maze = new Maze(MazeGame.ROWS, MazeGame.COLS);
+		resize();
+		repaint();
+	}
+	
+	public void resize(){
+		setPreferredSize(new Dimension(maze.getRows()*Maze.CELL_WIDTH+1,
+				maze.getCols()*Maze.CELL_HEIGHT+1));
+		repaint();
 	}
 	
 	@Override
