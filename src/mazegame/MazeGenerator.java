@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 Jeff.
+ * Copyright 2015 Jeffery Thompson.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,40 +23,39 @@
  */
 package mazegame;
 
+import java.util.Map;
+import java.util.Random;
+import java.util.Stack;
+import mazegame.Maze.Cell;
+
 /**
  *
- * @author Jeff
+ * @author Jeffery Thompson
  */
-public enum Direction {
-	NORTH, EAST, SOUTH, WEST;
+public class MazeGenerator {
 	
-	public Direction opposite(){
-		switch(this){
-			case NORTH:
-				return SOUTH;
-			case SOUTH:
-				return NORTH;
-			case WEST:
-				return EAST;
-			case EAST:
-				return WEST;
-			default:
-				return null;
-		}
-	}
-	
-	public String toString(){
-		switch(this){
-			case NORTH:
-				return "North";
-			case SOUTH:
-				return "South";
-			case WEST:
-				return "West";
-			case EAST:
-				return "East";
-			default:
-				return null;
-		}
+	public static void generateMaze(Maze m){
+		Random rand = new Random();
+		Stack<Cell> s = new Stack();
+		
+		Cell currCell = m.grid[rand.nextInt(m.getRows())][rand.nextInt(m.getCols())];
+		do {
+			Map<Direction, Cell> neighbors = currCell.getNeighbors();
+			Direction dir = Direction.values()[rand.nextInt(4)];
+			while((neighbors.get(dir) == null || neighbors.get(dir).visited) && !neighbors.isEmpty()) {
+				neighbors.remove(dir);
+				dir = Direction.values()[rand.nextInt(4)];
+			}
+			if(neighbors.isEmpty()){
+				currCell = s.pop();
+			}
+			else {
+				currCell.breakWall(dir);
+				System.out.println(currCell.posX+","+currCell.posY+" broke "+dir.toString()+" wall");
+				s.push(currCell);
+				currCell = currCell.getNeighbor(dir);
+			}
+		} while(!s.empty() && currCell != null);
+		
 	}
 }
