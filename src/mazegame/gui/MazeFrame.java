@@ -26,6 +26,9 @@ package mazegame.gui;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import mazegame.Maze;
 
 /**
@@ -43,5 +46,14 @@ public class MazeFrame extends JFrame {
 		this.pack();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
-	}	
+	}
+        
+        public JMenuBar createMenuBar(){
+            JMenuBar bar = new JMenuBar();
+            
+            JMenu maze = new JMenu("Maze");
+            JMenuItem newMaze = new JMenuItem();
+            
+            return bar;
+        }
 }
