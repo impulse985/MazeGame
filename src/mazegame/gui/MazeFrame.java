@@ -36,6 +36,7 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import mazegame.Direction;
 import mazegame.Maze;
+import mazegame.MazeGame;
 
 /**
  *
@@ -103,7 +104,10 @@ public class MazeFrame extends JFrame {
 		public void actionPerformed(ActionEvent ae) {
 			if(ae.getActionCommand().equals("New..."))
 			{
-				panel.newMaze();
+				maze = new Maze(MazeGame.ROWS, MazeGame.COLS);
+				panel.setMaze(maze);
+				panel.resize();
+				panel.repaint();
 			}
 			if(ae.getActionCommand().equals("Restart"))
 			{
@@ -135,28 +139,38 @@ public class MazeFrame extends JFrame {
 			public void keyPressed(KeyEvent ke) {
 				switch(ke.getKeyCode()) {
 					case KeyEvent.VK_UP:
+						if(maze.getPlayer(2)!=null)
+							maze.getPlayer(2).move(Direction.NORTH);
+						break;
 					case KeyEvent.VK_W:
-						maze.getPlayer().move(Direction.NORTH);
+						maze.getPlayer(1).move(Direction.NORTH);
 						break;
 					case KeyEvent.VK_DOWN:
+						if(maze.getPlayer(2)!=null)
+							maze.getPlayer(2).move(Direction.SOUTH);
+						break;
 					case KeyEvent.VK_S:
-						maze.getPlayer().move(Direction.SOUTH);
+						maze.getPlayer(1).move(Direction.SOUTH);
 						break;
 					case KeyEvent.VK_LEFT:
+						if(maze.getPlayer(2)!=null)
+							maze.getPlayer(2).move(Direction.WEST);
+						break;
 					case KeyEvent.VK_A:
-						maze.getPlayer().move(Direction.WEST);
+						maze.getPlayer(1).move(Direction.WEST);
 						break;
 					case KeyEvent.VK_RIGHT:
+						if(maze.getPlayer(2)!=null)
+							maze.getPlayer(2).move(Direction.EAST);
+						break;
 					case KeyEvent.VK_D:
-						maze.getPlayer().move(Direction.EAST);
-						panel.repaint();
+						maze.getPlayer(1).move(Direction.EAST);
 						break;
 					default:
 						break;
 				}
-				
-				maze.update();
 				panel.repaint();
+				maze.update();
 			}
 
 			@Override
