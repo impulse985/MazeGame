@@ -31,7 +31,7 @@ import mazegame.gui.MazeFrame;
  */
 public class MazeGame {
     public static void main(String[] args) {
-		Maze m = new Maze(20,30);
+		Maze m = new Maze(20,20);
 	    MazeFrame mf = new MazeFrame(m);
     }
 }
