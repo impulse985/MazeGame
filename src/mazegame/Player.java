@@ -27,6 +27,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Stack;
 import mazegame.Maze.Cell;
 
 /**
@@ -42,6 +45,7 @@ public class Player {
 	
 	private Maze maze;
 	private Cell pos;
+	private Path path;
 	
 	private Instant startTime, finishTime;
 	
@@ -56,6 +60,7 @@ public class Player {
 		maze = m;
 		pos = m.getStartCell();
 		playerColor = Color.blue;
+		path = new Path(playerColor, Color.yellow);
 		startTime = Instant.now();
 	}
 	
@@ -100,6 +105,7 @@ public class Player {
 	public boolean move(Direction dir){
 		if(pos.hasNeighbor(dir) && !pos.wall.get(dir) && !finished)
 		{
+			path.add(pos,dir);
 			pos = pos.getNeighbor(dir);
 			return true;
 		}
@@ -135,6 +141,7 @@ public class Player {
 	}
 	
 	public void paint(Graphics2D g){
+		path.paint(g);
 		g.setColor(playerColor);
 		g.fillRect(pos.posX*Maze.CELL_WIDTH + 3,
 				   pos.posY*Maze.CELL_HEIGHT + 3,

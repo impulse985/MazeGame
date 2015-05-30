@@ -44,8 +44,8 @@ public class Maze {
 	
 	private Cell start, goal;
 	
-	public static int CELL_WIDTH = 15;
-	public static int CELL_HEIGHT = 15;
+	public static int CELL_WIDTH = 16;
+	public static int CELL_HEIGHT = 16;
 	
 	public Maze(int r, int c){
 		rows = r;

@@ -30,8 +30,8 @@ import mazegame.gui.MazeFrame;
  * @author Jeff
  */
 public class MazeGame {
-	public static final int ROWS = 10;
-	public static final int COLS = 10;
+	public static final int ROWS = 15;
+	public static final int COLS = 15;
     public static void main(String[] args) {
 		Maze m = new Maze(ROWS,COLS);
 		Player p = new Player(m);
