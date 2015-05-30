@@ -25,6 +25,8 @@ package mazegame;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.time.Duration;
+import java.time.Instant;
 import mazegame.Maze.Cell;
 
 /**
@@ -38,33 +40,51 @@ import mazegame.Maze.Cell;
  */
 public class Player {
 	
-	Maze maze;
-	Cell pos;
+	private Maze maze;
+	private Cell pos;
 	
-	Color playerColor;
+	private Instant startTime, finishTime;
+	
+	private Color playerColor;
+	
+	private boolean finished = false;
 	/**
 	 * Creates a Player in the Maze m 
 	 * @param m 
 	 */
 	public Player(Maze m){
 		maze = m;
-		m.addPlayer(this);
 		pos = m.getStartCell();
 		playerColor = Color.blue;
+		startTime = Instant.now();
 	}
 	
 	public Player(Maze m, int x, int y){
 		maze = m;
-		m.addPlayer(this);
 		pos = m.getCell(x, y);
 		playerColor = Color.blue;
 	}
 	
+	/**
+	 * Gets the Player's display color.
+	 * @return Color used to draw this Player
+	 */
 	public Color getColor(){
 		return playerColor;
 	}
 	public void setColor(Color c){
 		playerColor = c;
+	}
+	
+	/**
+	 * Gets the Player's Duration of time in the maze. If the player has
+	 * finished the maze, this returns the completion time. Otherwise, returns
+	 * how long the Player has been in the maze so far.
+	 * @return Duration of time in the maze
+	 */
+	public Duration getTime(){
+		if(finished) return Duration.between(startTime, finishTime);
+		else return Duration.between(startTime, Instant.now());
 	}
 	
 	/**
@@ -78,7 +98,7 @@ public class Player {
 	 * @return true if the player moved successfully, false otherwise
 	 */
 	public boolean move(Direction dir){
-		if(pos.hasNeighbor(dir) && !pos.wall.get(dir))
+		if(pos.hasNeighbor(dir) && !pos.wall.get(dir) && !finished)
 		{
 			pos = pos.getNeighbor(dir);
 			return true;
@@ -86,14 +106,38 @@ public class Player {
 		return false;
 	}
 	
+	/**
+	 * Checks to see if the player has reached the goal cell of the maze.
+	 * If the player has won, this method sets the player as finished, so they
+	 * can no longer move and spam win messages.
+	 * @return true if the Player is at the goal, false otherwise
+	 */
+	public boolean checkWin(){
+		if(pos.equals(maze.getGoalCell()))
+		{
+			finishTime = Instant.now();
+			finished = true;
+			return true;
+		}
+		else return false;
+	}
+	
+	public boolean hasFinished(){
+		return finished;
+	}
+	
+	/**
+	 * Returns the player to the starting Cell of the maze.
+	 */
 	public void restart(){
 		pos = maze.getStartCell();
+		startTime = Instant.now();
 	}
 	
 	public void paint(Graphics2D g){
 		g.setColor(playerColor);
-		g.fillRect(pos.posX*Maze.CELL_WIDTH + Maze.CELL_WIDTH/4 ,
-				   pos.posY*Maze.CELL_HEIGHT + Maze.CELL_HEIGHT/4,
-				   Maze.CELL_WIDTH/2, Maze.CELL_HEIGHT/2);
+		g.fillRect(pos.posX*Maze.CELL_WIDTH + 3,
+				   pos.posY*Maze.CELL_HEIGHT + 3,
+				   Maze.CELL_WIDTH -5, Maze.CELL_HEIGHT-5);
 	}
 }

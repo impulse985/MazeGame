@@ -23,20 +23,23 @@
  */
 package mazegame.gui;
 
-import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.time.Duration;
+import java.time.format.DateTimeFormatter;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import mazegame.Direction;
 import mazegame.Maze;
 import mazegame.MazeGame;
+import mazegame.Player;
 
 /**
  *
@@ -45,9 +48,12 @@ import mazegame.MazeGame;
 public class MazeFrame extends JFrame {
 	MazePanel panel;
 	Maze maze;
-	public MazeFrame(Maze m) {
+	
+	Player player;
+	public MazeFrame(Maze m, Player p) {
 		maze = m;
-		panel = new MazePanel(m);
+		player = p;
+		panel = new MazePanel(m, p);
 		this.setContentPane(panel);
 		
 		this.setJMenuBar(createMenuBar());
@@ -93,9 +99,23 @@ public class MazeFrame extends JFrame {
 		return bar;
 	}
 	
+	public void setPlayer(Player p){
+		player = p;
+		panel.setPlayer(p);
+	}
+	
 	public void resize(){
 		panel.resize();
 		this.pack();
+	}
+	
+	public void winMessage(){
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("mm:ss");
+		Duration time = player.getTime();
+		String minutes = (time.toMinutes() < 10 ? "0": "") + time.toMinutes();
+		String seconds = (time.getSeconds()%60 < 10 ? "0": "") + time.getSeconds()%60;
+		JOptionPane.showMessageDialog(null, "You won! Time: "
+				+ minutes + ":" + seconds);
 	}
 	
 	public class MenuListener implements ActionListener {
@@ -106,12 +126,13 @@ public class MazeFrame extends JFrame {
 			{
 				maze = new Maze(MazeGame.ROWS, MazeGame.COLS);
 				panel.setMaze(maze);
+				setPlayer(new Player(maze));
 				panel.resize();
 				panel.repaint();
 			}
 			if(ae.getActionCommand().equals("Restart"))
 			{
-				panel.restartMaze();
+				panel.restart();
 			}
 			if(ae.getActionCommand().equals("Zoom in"))
 			{
@@ -128,55 +149,39 @@ public class MazeFrame extends JFrame {
 		}
 	}
 	
-	public class KeyboardInput implements KeyListener{
-
+	public class KeyboardInput implements KeyListener {
 			@Override
-			public void keyTyped(KeyEvent ke) {
-				
-			}
+			public void keyTyped(KeyEvent ke) {}
 
 			@Override
 			public void keyPressed(KeyEvent ke) {
 				switch(ke.getKeyCode()) {
 					case KeyEvent.VK_UP:
-						if(maze.getPlayer(2)!=null)
-							maze.getPlayer(2).move(Direction.NORTH);
-						break;
 					case KeyEvent.VK_W:
-						maze.getPlayer(1).move(Direction.NORTH);
+						player.move(Direction.NORTH);
 						break;
 					case KeyEvent.VK_DOWN:
-						if(maze.getPlayer(2)!=null)
-							maze.getPlayer(2).move(Direction.SOUTH);
-						break;
 					case KeyEvent.VK_S:
-						maze.getPlayer(1).move(Direction.SOUTH);
+						player.move(Direction.SOUTH);
 						break;
 					case KeyEvent.VK_LEFT:
-						if(maze.getPlayer(2)!=null)
-							maze.getPlayer(2).move(Direction.WEST);
-						break;
 					case KeyEvent.VK_A:
-						maze.getPlayer(1).move(Direction.WEST);
+						player.move(Direction.WEST);
 						break;
 					case KeyEvent.VK_RIGHT:
-						if(maze.getPlayer(2)!=null)
-							maze.getPlayer(2).move(Direction.EAST);
-						break;
 					case KeyEvent.VK_D:
-						maze.getPlayer(1).move(Direction.EAST);
+						player.move(Direction.EAST);
 						break;
 					default:
 						break;
 				}
-				panel.repaint();
-				maze.update();
-			}
-
-			@Override
-			public void keyReleased(KeyEvent ke) {
 				
+				panel.repaint();
+				if(!player.hasFinished() && player.checkWin())
+					winMessage();
 			}
+			@Override
+			public void keyReleased(KeyEvent ke) {}
 			
 		}
 }

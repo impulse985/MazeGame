@@ -34,6 +34,7 @@ public class MazeGame {
 	public static final int COLS = 10;
     public static void main(String[] args) {
 		Maze m = new Maze(ROWS,COLS);
-	    MazeFrame mf = new MazeFrame(m);
+		Player p = new Player(m);
+	    MazeFrame mf = new MazeFrame(m, p);
     }
 }

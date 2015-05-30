@@ -27,7 +27,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.Iterator;
 import java.util.Map;
 import javax.swing.JOptionPane;
 
@@ -40,10 +42,7 @@ public class Maze {
 	private int rows;
 	private int cols;
 	
-	private Player player;
 	private Cell start, goal;
-	
-	private Instant startTime;
 	
 	public static int CELL_WIDTH = 15;
 	public static int CELL_HEIGHT = 15;
@@ -57,9 +56,8 @@ public class Maze {
 				grid[i][j] = new Cell(i, j);
 		start = grid[0][0];
 		goal = grid[rows-1][cols-1];
-		player = new Player(this);
+		
 		MazeGenerator.generateMaze(this);
-		startTime = Instant.now();
 	}
 	
 	public int getRows(){
@@ -87,32 +85,11 @@ public class Maze {
 		goal = c;
 	}
 	
-	public void addPlayer(Player p){
-		player = p;
-	}
-	
-	public Player getPlayer(){
-		return player;
-	}
-	
-	public void restart(){
-		player.restart();
-	}
-	
-	public void update(){
-		if(player.pos == goal){
-			Instant finishTime = Instant.now();
-			Duration solveTime = Duration.between(startTime, finishTime);
-			JOptionPane.showMessageDialog(null, "You finished the maze in "+solveTime.getSeconds()+" seconds.");
-		}
-	}
-	
 	public void paint(Graphics2D g){
 		for(int i = 0; i < rows; i++)
 			for(int j = 0; j < cols; j++){
 				if(grid[i][j] != null) grid[i][j].paint(g);
 			}
-		player.paint(g);
 	}
 	
 	public class Cell {
@@ -176,7 +153,7 @@ public class Maze {
 			else if( this == goal) g.setColor(Color.red);
 			else g.setColor(Color.white);
 			
-			g.fillRect(posX*CELL_WIDTH, posY*CELL_HEIGHT, 
+			g.fillRect(posX*CELL_WIDTH+1, posY*CELL_HEIGHT+1, 
 					CELL_WIDTH, CELL_HEIGHT);
 			g.setColor(Color.black);
 			if(wall.get(Direction.NORTH))
