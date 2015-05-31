@@ -28,8 +28,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
 import mazegame.Maze;
-import mazegame.Player;
-import mazegame.PlayerList;
+import mazegame.player.Player;
+import mazegame.player.PlayerList;
 
 /**
  *

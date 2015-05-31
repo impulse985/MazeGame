@@ -38,8 +38,8 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import mazegame.Direction;
 import mazegame.Maze;
-import mazegame.Player;
-import mazegame.PlayerList;
+import mazegame.player.Player;
+import mazegame.player.PlayerList;
 
 /**
  *
@@ -118,6 +118,7 @@ public class MazeFrame extends JFrame {
 			if(ae.getActionCommand().equals("New..."))
 			{
 				maze = new Maze(maze.getRows(), maze.getCols());
+				maze.setGoalCell(maze.getCell(10, 10));
 				panel.setMaze(maze);
 				PlayerList.setMaze(maze);
 				panel.resize();
@@ -126,6 +127,7 @@ public class MazeFrame extends JFrame {
 			if(ae.getActionCommand().equals("Restart"))
 			{
 				panel.restart();
+				panel.repaint();
 			}
 			if(ae.getActionCommand().equals("Zoom in"))
 			{
@@ -145,38 +147,7 @@ public class MazeFrame extends JFrame {
 	public class KeyboardInput implements KeyListener {
 			@Override
 			public void keyTyped(KeyEvent ke) {
-				switch(ke.getKeyChar()) {
-						case KeyEvent.VK_UP:
-							PlayerList.get(1).move(Direction.NORTH);
-							break;
-						case 'w':
-							PlayerList.get(0).move(Direction.NORTH);
-							break;
-						case KeyEvent.VK_DOWN:
-							PlayerList.get(1).move(Direction.SOUTH);
-							break;
-						case 's':
-							PlayerList.get(0).move(Direction.SOUTH);
-							break;
-						case KeyEvent.VK_LEFT:
-							PlayerList.get(1).move(Direction.WEST);
-							break;
-						case 'a':
-							PlayerList.get(0).move(Direction.WEST);
-							break;
-						case KeyEvent.VK_RIGHT:
-							PlayerList.get(1).move(Direction.EAST);
-							break;
-						case 'd':
-							PlayerList.get(0).move(Direction.EAST);
-							break;
-						default:
-							break;
-				}
-				panel.repaint();
-				for(Player p : PlayerList.getPlayers())
-					if(!p.hasFinished() && p.checkWin())
-						winMessage(p);
+				
 			}
 
 			@Override

@@ -29,7 +29,11 @@ import java.util.Stack;
 import mazegame.Maze.Cell;
 
 /**
- *
+ * A static utility class to generate a maze on a given Maze object. The current
+ * algorithm used to create the maze is a randomized depth-first search (DFS),
+ * which guarantees only one path between any two points. Thus, there is only
+ * one possible path from start to finish. I plan on implementing more maze
+ * generating algorithms, such as Prim's algorithm.
  * @author Jeffery Thompson
  */
 public class MazeGenerator {

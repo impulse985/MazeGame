@@ -34,13 +34,17 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 
 /**
- *
+ * A class that stores and manipulates a maze. The maze is represented by a grid
+ * of Cells with walls in between them. The maze is made by knocking down the
+ * walls between the Cells to create a path between the start and end.
+ * 
+ * The maze uses a MazeGenerator to 
  * @author Jeff
  */
 public class Maze {
 	private Cell[][] grid;
-	private int rows;
-	private int cols;
+	private int rowX; // Number of cells in a row
+	private int colY; // Number of cells in a column
 	
 	private Cell start, goal;
 	
@@ -48,26 +52,33 @@ public class Maze {
 	public static int CELL_HEIGHT = 16;
 	
 	public Maze(int r, int c){
-		rows = r;
-		cols = c;
-		grid = new Cell[rows][cols];
-		for(int i = 0; i < rows; i++)
-			for(int j = 0; j < cols; j++)
+		rowX = r;
+		colY = c;
+		grid = new Cell[rowX][colY];
+		for(int i = 0; i < rowX; i++)
+			for(int j = 0; j < colY; j++)
 				grid[i][j] = new Cell(i, j);
 		start = grid[0][0];
-		goal = grid[rows-1][cols-1];
+		goal = grid[rowX-1][colY-1];
 		
 		MazeGenerator.generateMaze(this);
 	}
 	
 	public int getRows(){
-		return rows;
+		return rowX;
 	}
 	public int getCols(){
-		return cols;
+		return colY;
 	}
 	
+	/**
+	 * Gets the Cell of the maze at position (x,y). The x position is the 
+	 * @param x x position of Cell
+	 * @param y y position of Cell
+	 * @return 
+	 */
 	public Cell getCell(int x, int y){
+		if(x >= rowX || y >= colY || x < 0 || y < 0) return null;
 		return grid[x][y];
 	}
 	
@@ -86,8 +97,8 @@ public class Maze {
 	}
 	
 	public void paint(Graphics2D g){
-		for(int i = 0; i < rows; i++)
-			for(int j = 0; j < cols; j++){
+		for(int i = 0; i < rowX; i++)
+			for(int j = 0; j < colY; j++){
 				if(grid[i][j] != null) grid[i][j].paint(g);
 			}
 	}
@@ -107,15 +118,25 @@ public class Maze {
 			visited = false;
 		}
 		
+		public int getX(){
+			return posX;
+		}
+		public int getY(){
+			return posY;
+		}
+		public Map<Direction, Boolean> getWalls(){
+			return wall;
+		}
+		
 		public boolean hasNeighbor(Direction dir){
 			return getNeighbor(dir) != null;
 		}
 		public Cell getNeighbor(Direction dir){
 			if(dir == Direction.NORTH && posY > 0)
 				return grid[posX][posY-1];
-			if(dir == Direction.SOUTH && posY < cols-1)
+			if(dir == Direction.SOUTH && posY < colY-1)
 				return grid[posX][posY+1];
-			if(dir == Direction.EAST && posX < rows-1)
+			if(dir == Direction.EAST && posX < rowX-1)
 				return grid[posX+1][posY];
 			if(dir == Direction.WEST && posX > 0)
 				return grid[posX-1][posY];
@@ -145,17 +166,20 @@ public class Maze {
 			}
 			visited = true;
 		}
-		private void breakWall(){
-		}
 		
 		public void paint(Graphics2D g){
-			if( this == start) g.setColor(Color.green);
-			else if( this == goal) g.setColor(Color.red);
-			else g.setColor(Color.white);
-			
+			g.setColor(Color.white);
 			g.fillRect(posX*CELL_WIDTH+1, posY*CELL_HEIGHT+1, 
 					CELL_WIDTH, CELL_HEIGHT);
 			g.setColor(Color.black);
+			//draw checkerboard goal
+			if(this == goal){
+				for(int i = 0; i < 4; i++) 
+					for(int j = 0; j < 4; j++)
+						if(i%2==j%2)
+							g.fillRect(posX*CELL_WIDTH+i*CELL_WIDTH/4, posY*CELL_HEIGHT+j*CELL_HEIGHT/4,
+									CELL_WIDTH/4, CELL_HEIGHT/4);
+			}
 			if(wall.get(Direction.NORTH))
 				g.drawLine(posX*CELL_WIDTH, posY*CELL_HEIGHT,
 					(posX+1)*CELL_WIDTH, posY*CELL_HEIGHT);

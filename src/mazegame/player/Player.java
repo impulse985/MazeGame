@@ -21,15 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package mazegame;
+package mazegame.player;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Stack;
+import mazegame.Direction;
+import mazegame.Maze;
 import mazegame.Maze.Cell;
 
 /**
@@ -44,6 +43,7 @@ import mazegame.Maze.Cell;
 public class Player {
 	
 	private Maze maze;
+	private Cell start;
 	private Cell pos;
 	private Path path;
 	
@@ -54,10 +54,11 @@ public class Player {
 	private boolean finished = false;
 	/**
 	 * Creates a Player in the Maze m 
-	 * @param m 
+	 * @param m Maze the Player is in
 	 */
 	public Player(Maze m){
 		maze = m;
+		start = m.getStartCell();
 		pos = m.getStartCell();
 		playerColor = Color.blue;
 		path = new Path(playerColor, Color.yellow);
@@ -66,7 +67,17 @@ public class Player {
 	
 	public Player(Maze m, Color c){
 		maze = m;
-		pos = m.getStartCell();
+		start = m.getStartCell();
+		pos = start;
+		playerColor = c;
+		path = new Path(playerColor, Color.yellow);
+		startTime = Instant.now();
+	}
+	
+	public Player(Maze m, Color c, Cell s){
+		maze = m;
+		start = s;
+		pos = start;
 		playerColor = c;
 		path = new Path(playerColor, Color.yellow);
 		startTime = Instant.now();
@@ -95,11 +106,14 @@ public class Player {
 	}
 	
 	public void setMaze(Maze m){
+		int startX, startY;
+		if(start.getX() >= m.getRows()) startX = m.getRows()-1;
+		else startX = start.getX();
+		if(start.getY() >= m.getCols()) startY = m.getCols()-1;
+		else startY = start.getY();
 		maze = m;
-		finished = false;
-		pos = m.getStartCell();
-		path = new Path(playerColor, Color.yellow);
-		startTime = Instant.now();
+		start = m.getCell(startX, startY);
+		restart();
 	}
 	
 	/**
@@ -113,7 +127,7 @@ public class Player {
 	 * @return true if the player moved successfully, false otherwise
 	 */
 	public boolean move(Direction dir){
-		if(pos.hasNeighbor(dir) && !pos.wall.get(dir) && !finished)
+		if(pos.hasNeighbor(dir) && !pos.getWalls().get(dir) && !finished)
 		{
 			path.add(pos,dir);
 			pos = pos.getNeighbor(dir);
@@ -146,16 +160,22 @@ public class Player {
 	 * Returns the player to the starting Cell of the maze.
 	 */
 	public void restart(){
-		pos = maze.getStartCell();
 		finished = false;
+		pos = start;
+		path = new Path(playerColor, Color.yellow);
 		startTime = Instant.now();
 	}
 	
 	public void paint(Graphics2D g){
 		path.paint(g);
+		
 		g.setColor(playerColor);
-		g.fillRect(pos.posX*Maze.CELL_WIDTH + 3,
-				   pos.posY*Maze.CELL_HEIGHT + 3,
+		g.fillRect(start.getX()*Maze.CELL_WIDTH+1, start.getY()*Maze.CELL_HEIGHT+1, 
+					Maze.CELL_WIDTH-1, Maze.CELL_HEIGHT-1);
+		
+		g.setColor(playerColor);
+		g.fillRect(pos.getX()*Maze.CELL_WIDTH + 3,
+				   pos.getY()*Maze.CELL_HEIGHT + 3,
 				   Maze.CELL_WIDTH -5, Maze.CELL_HEIGHT-5);
 	}
 }

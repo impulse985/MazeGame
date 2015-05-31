@@ -23,6 +23,8 @@
  */
 package mazegame;
 
+import mazegame.player.PlayerList;
+import mazegame.player.Player;
 import java.awt.Color;
 import mazegame.gui.MazeFrame;
 
@@ -31,11 +33,11 @@ import mazegame.gui.MazeFrame;
  * @author Jeff
  */
 public class MazeGame {
-	public static int ROWS = 30;
-	public static int COLS = 30;
     public static void main(String[] args) {
-		Maze m = new Maze(20,20);
-		PlayerList.add(new Player(m,Color.blue));
+		Maze m = new Maze(21,21);
+		m.setGoalCell(m.getCell(10, 10));
+		PlayerList.add(new Player(m,Color.red));
+		//PlayerList.add(new Player(m,Color.red,m.getCell(20,20)));
 	    MazeFrame mf = new MazeFrame(m);
     }
 }

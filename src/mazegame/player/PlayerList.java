@@ -21,11 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package mazegame;
+package mazegame.player;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import mazegame.Maze;
 
 /**
  * A class to maintain a list of all Players in the current maze.
@@ -35,15 +36,16 @@ public class PlayerList {
 	private static final Map<Integer, Player> player = new HashMap();
 	private static int numPlayers = 0;
 	public static void add(Player p){
-		player.put(++numPlayers,p);
+		player.put(numPlayers++,p);
 	}
 	
 	/**
-	 * Returns the Player with the given player number.
+	 * Gets the Player with the given player number.
 	 * @param i player number
-	 * @return 
+	 * @return player number i, or null if that player does not exist
 	 */
 	public static Player get(int i){
+		if(!player.containsKey(i)) return null;
 		return player.get(i);
 	}
 	
@@ -51,8 +53,8 @@ public class PlayerList {
 		return player.values();
 	}
 	public static void setMaze(Maze m){
-		for(Player p : player.values()){
-			p.setMaze(m);
+		for(Integer k : player.keySet()){
+			player.get(k).setMaze(m);
 		}
 	}
 }

@@ -21,13 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package mazegame;
+package mazegame.player;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
+import mazegame.Direction;
+import mazegame.Maze;
 import mazegame.Maze.Cell;
 
 /**
@@ -93,39 +95,39 @@ public class Path {
 		
 		@Override
 		public int hashCode(){
-			return point.posX*MazeGame.COLS+point.posY;
+			return (point.getX()<<16)+point.getY();
 		}
 		
 		@Override
 		public boolean equals(Object o){
 			if(!o.getClass().equals(PathPoint.class)) return false;
 			PathPoint p = (PathPoint)o;
-			return p.point.posX == point.posX && p.point.posY == point.posY;
+			return p.point.getX() == point.getX() && p.point.getY() == point.getY();
 		}
 		
 		public void paint(Graphics2D g){
-			g.fillRect(point.posX*Maze.CELL_WIDTH + 5,
-				   point.posY*Maze.CELL_HEIGHT + 5,
+			g.fillRect(point.getX()*Maze.CELL_WIDTH + 5,
+				   point.getY()*Maze.CELL_HEIGHT + 5,
 				   Maze.CELL_WIDTH -9, Maze.CELL_HEIGHT-9);
 			switch(dir){
 				case NORTH:
-					g.fillRect(point.posX*Maze.CELL_WIDTH + 5,
-							point.posY*Maze.CELL_HEIGHT - 4,
+					g.fillRect(point.getX()*Maze.CELL_WIDTH + 5,
+							point.getY()*Maze.CELL_HEIGHT - 4,
 							Maze.CELL_WIDTH-9, 9);
 					break;
 				case SOUTH:
-					g.fillRect(point.posX*Maze.CELL_WIDTH + 5,
-							(point.posY+1)*Maze.CELL_HEIGHT - 4,
+					g.fillRect(point.getX()*Maze.CELL_WIDTH + 5,
+							(point.getY()+1)*Maze.CELL_HEIGHT - 4,
 							Maze.CELL_WIDTH-9, 9);
 					break;
 				case EAST:
-					g.fillRect((point.posX+1)*Maze.CELL_WIDTH - 4,
-							point.posY*Maze.CELL_HEIGHT + 5,
+					g.fillRect((point.getX()+1)*Maze.CELL_WIDTH - 4,
+							point.getY()*Maze.CELL_HEIGHT + 5,
 							9, Maze.CELL_HEIGHT-9);
 					break;
 				case WEST:
-					g.fillRect(point.posX*Maze.CELL_WIDTH - 4,
-							point.posY*Maze.CELL_HEIGHT + 5,
+					g.fillRect(point.getX()*Maze.CELL_WIDTH - 4,
+							point.getY()*Maze.CELL_HEIGHT + 5,
 							9, Maze.CELL_HEIGHT-9);
 					break;
 			}
