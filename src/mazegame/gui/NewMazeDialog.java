@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 Jeff Thompson.
+ * Copyright 2015 Jeffery Thompson.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,23 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package mazegame;
+package mazegame.gui;
 
-import mazegame.player.PlayerList;
-import mazegame.player.Player;
-import java.awt.Color;
-import mazegame.gui.MazeFrame;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import mazegame.MazeOptions;
 
 /**
- *
- * @author Jeff
+ * A dialog box shown when a user wants to generate a new maze. This dialog
+ * allows the user to select the maze size, starting positions of player(s),
+ * the goal position, and the maze generation algorithm. The dialog returns
+ * a MazeOptions for use in the main MazeFrame to create the new maze.
+ * @author Jeffery Thompson
  */
-public class MazeGame {
-    public static void main(String[] args) {
-		Maze m = new Maze(10,10);
-		//m.setGoalCell(m.getCell(2, 2));
-		PlayerList.add(new Player(m,Color.red));
-		//PlayerList.add(new Player(m,Color.red,m.getCell(20,20)));
-	    MazeFrame mf = new MazeFrame(m);
-    }
+public class NewMazeDialog extends JDialog {
+	MazeOptions options;
+	public NewMazeDialog(JFrame f){
+		super(f,"New Maze",true);
+	}
+	
+	public MazeOptions showDialog(){
+		return options;
+	}
+	
 }

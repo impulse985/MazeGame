@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 Jeff Thompson.
+ * Copyright 2015 Jeffery Thompson.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,21 +23,29 @@
  */
 package mazegame;
 
-import mazegame.player.PlayerList;
-import mazegame.player.Player;
-import java.awt.Color;
-import mazegame.gui.MazeFrame;
-
 /**
  *
- * @author Jeff
+ * @author Jeffery Thompson
  */
-public class MazeGame {
-    public static void main(String[] args) {
-		Maze m = new Maze(10,10);
-		//m.setGoalCell(m.getCell(2, 2));
-		PlayerList.add(new Player(m,Color.red));
-		//PlayerList.add(new Player(m,Color.red,m.getCell(20,20)));
-	    MazeFrame mf = new MazeFrame(m);
-    }
+public class MazeOptions {
+	private int rowX, rowY;
+	private Algorithm algorithm;
+	
+	private int startX, startY;
+	private int goalX, goalY;
+	
+	public enum Algorithm {
+		DFS,PRIM;
+	}
+	
+	/**
+	 * Builder class for MazeOptions. Due to the large number of parameters a
+	 * MazeOptions object needs, this builder class is used to prevent having
+	 * a ton of 
+	 */
+	public class Builder{
+		public Builder(int x, int y){
+			
+		}
+	}
 }

@@ -117,8 +117,9 @@ public class MazeFrame extends JFrame {
 		public void actionPerformed(ActionEvent ae) {
 			if(ae.getActionCommand().equals("New..."))
 			{
+				//NewMazeDialog n = new NewMazeDialog(MazeFrame.this);
 				maze = new Maze(maze.getRows(), maze.getCols());
-				maze.setGoalCell(maze.getCell(10, 10));
+				//maze.setGoalCell(maze.getCell(10, 10));
 				panel.setMaze(maze);
 				PlayerList.setMaze(maze);
 				panel.resize();

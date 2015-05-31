@@ -44,6 +44,8 @@ public class Path {
 	private Color pathColor;
 	private Color backtrackColor;
 	
+	private int pathWidth = (Maze.CELL_WIDTH-1)/4;
+	
 	public Path(Color pc, Color btc){
 		curPath = new Stack();
 		backtrack = new HashSet();
@@ -106,29 +108,29 @@ public class Path {
 		}
 		
 		public void paint(Graphics2D g){
-			g.fillRect(point.getX()*Maze.CELL_WIDTH + 5,
-				   point.getY()*Maze.CELL_HEIGHT + 5,
-				   Maze.CELL_WIDTH -9, Maze.CELL_HEIGHT-9);
+			g.fillRect(point.getX()*Maze.CELL_WIDTH + (Maze.CELL_WIDTH-pathWidth-1)/2+1,
+				   point.getY()*Maze.CELL_HEIGHT + (Maze.CELL_HEIGHT-pathWidth-1)/2+1,
+				   pathWidth, pathWidth);
 			switch(dir){
 				case NORTH:
-					g.fillRect(point.getX()*Maze.CELL_WIDTH + 5,
-							point.getY()*Maze.CELL_HEIGHT - 4,
-							Maze.CELL_WIDTH-9, 9);
+					g.fillRect(point.getX()*Maze.CELL_WIDTH + (Maze.CELL_WIDTH-pathWidth-1)/2+1,
+							point.getY()*Maze.CELL_HEIGHT - (Maze.CELL_HEIGHT-pathWidth-1)/2,
+							pathWidth, Maze.CELL_HEIGHT-pathWidth);
 					break;
 				case SOUTH:
-					g.fillRect(point.getX()*Maze.CELL_WIDTH + 5,
-							(point.getY()+1)*Maze.CELL_HEIGHT - 4,
-							Maze.CELL_WIDTH-9, 9);
+					g.fillRect(point.getX()*Maze.CELL_WIDTH + (Maze.CELL_WIDTH-pathWidth-1)/2+1,
+							(point.getY()+1)*Maze.CELL_HEIGHT - (Maze.CELL_HEIGHT-pathWidth-1)/2,
+							pathWidth, Maze.CELL_HEIGHT-pathWidth);
 					break;
 				case EAST:
-					g.fillRect((point.getX()+1)*Maze.CELL_WIDTH - 4,
-							point.getY()*Maze.CELL_HEIGHT + 5,
-							9, Maze.CELL_HEIGHT-9);
+					g.fillRect((point.getX()+1)*Maze.CELL_WIDTH - (Maze.CELL_WIDTH-pathWidth-1)/2,
+							point.getY()*Maze.CELL_HEIGHT + (Maze.CELL_HEIGHT-pathWidth-1)/2 +1,
+							Maze.CELL_WIDTH-pathWidth, pathWidth);
 					break;
 				case WEST:
-					g.fillRect(point.getX()*Maze.CELL_WIDTH - 4,
-							point.getY()*Maze.CELL_HEIGHT + 5,
-							9, Maze.CELL_HEIGHT-9);
+					g.fillRect(point.getX()*Maze.CELL_WIDTH - (Maze.CELL_WIDTH-pathWidth-1)/2,
+							point.getY()*Maze.CELL_HEIGHT + (Maze.CELL_HEIGHT-pathWidth-1)/2 + 1,
+							Maze.CELL_WIDTH-pathWidth, pathWidth);
 					break;
 			}
 		}
