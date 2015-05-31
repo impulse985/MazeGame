@@ -23,29 +23,54 @@
  */
 package mazegame;
 
+
 /**
  *
  * @author Jeffery Thompson
  */
 public class MazeOptions {
-	private int rowX, rowY;
+	private int sizeX, sizeY;
 	private Algorithm algorithm;
 	
-	private int startX, startY;
-	private int goalX, goalY;
+	private Point start;
+	private Point goal;
+	
+	public MazeOptions(int x, int y){
+		sizeX = x;
+		sizeY = y;
+		algorithm = Algorithm.DFS;
+		start = new Point(0,0);
+		goal = new Point(x-1,y-1);
+	}
+	public int getSizeX(){
+		return sizeX;
+	}
+	public int getSizeY(){
+		return sizeY;
+	}
+	
+	public Algorithm getAlgorithm(){
+		return algorithm;
+	}
+	public void setAlgorithm(Algorithm a){
+		algorithm = a;
+	}
+	
+	public Point getStart(){
+		return start;
+	}
+	public void setStart(Point p){
+		start = p;
+	}
+	
+	public Point getGoal(){
+		return goal;
+	}
+	public void setGoal(Point p){
+		goal = p;
+	}
 	
 	public enum Algorithm {
 		DFS,PRIM;
-	}
-	
-	/**
-	 * Builder class for MazeOptions. Due to the large number of parameters a
-	 * MazeOptions object needs, this builder class is used to prevent having
-	 * a ton of 
-	 */
-	public class Builder{
-		public Builder(int x, int y){
-			
-		}
 	}
 }

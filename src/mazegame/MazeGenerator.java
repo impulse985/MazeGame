@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Stack;
 import mazegame.Maze.Cell;
+import mazegame.MazeOptions.Algorithm;
 
 /**
  * A static utility class to generate a maze on a given Maze object. The current
@@ -38,11 +39,25 @@ import mazegame.Maze.Cell;
  */
 public class MazeGenerator {
 	
-	public static void generateMaze(Maze m){
+	public static void generateMaze(Maze m, Algorithm a){
+		switch(a){
+			case DFS:
+				generateDFSMaze(m);
+				break;
+			case PRIM:
+				generatePrimMaze(m);
+				break;
+			default:
+				break;
+		}
+	}
+	
+	private static void generateDFSMaze(Maze m){
 		Random rand = new Random();
 		Stack<Cell> s = new Stack();
 		
-		Cell currCell = m.getCell(rand.nextInt(m.getRows()),rand.nextInt(m.getCols()));
+		Cell currCell = m.getCell(rand.nextInt(m.getOptions().getSizeX()),
+				rand.nextInt(m.getOptions().getSizeY()));
 		do {
 			Map<Direction, Cell> neighbors = currCell.getNeighbors();
 			Direction dir = Direction.values()[rand.nextInt(4)];
@@ -59,6 +74,7 @@ public class MazeGenerator {
 				currCell = currCell.getNeighbor(dir);
 			}
 		} while(!s.empty() && currCell != null);
-		
 	}
+	
+	private static void generatePrimMaze(Maze m){}
 }

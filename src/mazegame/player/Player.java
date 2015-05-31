@@ -30,6 +30,7 @@ import java.time.Instant;
 import mazegame.Direction;
 import mazegame.Maze;
 import mazegame.Maze.Cell;
+import mazegame.Point;
 
 /**
  * Represents a user who moves around in the maze. This class provides a way for
@@ -58,8 +59,8 @@ public class Player {
 	 */
 	public Player(Maze m){
 		maze = m;
-		start = m.getStartCell();
-		pos = m.getStartCell();
+		start = m.getCell(m.getOptions().getStart());
+		pos = start;
 		playerColor = Color.blue;
 		path = new Path(playerColor, Color.yellow);
 		startTime = Instant.now();
@@ -67,16 +68,16 @@ public class Player {
 	
 	public Player(Maze m, Color c){
 		maze = m;
-		start = m.getStartCell();
+		start = m.getCell(m.getOptions().getStart());
 		pos = start;
 		playerColor = c;
 		path = new Path(playerColor, Color.yellow);
 		startTime = Instant.now();
 	}
 	
-	public Player(Maze m, Color c, Cell s){
+	public Player(Maze m, Color c, Point s){
 		maze = m;
-		start = s;
+		start = m.getCell(s);
 		pos = start;
 		playerColor = c;
 		path = new Path(playerColor, Color.yellow);
@@ -94,6 +95,11 @@ public class Player {
 		playerColor = c;
 	}
 	
+	public void setStart(Point s){
+		if(maze.getCell(s) != null)
+			start = maze.getCell(s);
+	}
+	
 	/**
 	 * Gets the Player's Duration of time in the maze. If the player has
 	 * finished the maze, this returns the completion time. Otherwise, returns
@@ -107,10 +113,10 @@ public class Player {
 	
 	public void setMaze(Maze m){
 		int startX, startY;
-		if(start.getX() >= m.getRows()) startX = m.getRows()-1;
-		else startX = start.getX();
-		if(start.getY() >= m.getCols()) startY = m.getCols()-1;
-		else startY = start.getY();
+		if(start.getPos().getX() >= m.getOptions().getSizeX()) startX = m.getOptions().getSizeX()-1;
+		else startX = start.getPos().getX();
+		if(start.getPos().getY() >= m.getOptions().getSizeY()) startY = m.getOptions().getSizeY()-1;
+		else startY = start.getPos().getY();
 		maze = m;
 		start = m.getCell(startX, startY);
 		restart();
@@ -143,7 +149,7 @@ public class Player {
 	 * @return true if the Player is at the goal, false otherwise
 	 */
 	public boolean checkWin(){
-		if(pos.equals(maze.getGoalCell()))
+		if(pos.equals(maze.getCell(maze.getOptions().getGoal())))
 		{
 			finishTime = Instant.now();
 			finished = true;
@@ -170,12 +176,12 @@ public class Player {
 		path.paint(g);
 		
 		g.setColor(playerColor);
-		g.fillRect(start.getX()*Maze.CELL_WIDTH+1, start.getY()*Maze.CELL_HEIGHT+1, 
+		g.fillRect(start.getPos().getX()*Maze.CELL_WIDTH+1, start.getPos().getY()*Maze.CELL_HEIGHT+1, 
 					Maze.CELL_WIDTH-1, Maze.CELL_HEIGHT-1);
 		
 		g.setColor(playerColor);
-		g.fillRect(pos.getX()*Maze.CELL_WIDTH + 3,
-				   pos.getY()*Maze.CELL_HEIGHT + 3,
+		g.fillRect(pos.getPos().getX()*Maze.CELL_WIDTH + 3,
+				   pos.getPos().getY()*Maze.CELL_HEIGHT + 3,
 				   Maze.CELL_WIDTH -5, Maze.CELL_HEIGHT-5);
 	}
 }

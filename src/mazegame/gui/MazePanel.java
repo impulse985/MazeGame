@@ -40,8 +40,8 @@ public class MazePanel extends JPanel {
 	
 	public MazePanel(Maze m){
 		maze = m;
-		setPreferredSize(new Dimension(m.getRows()*Maze.CELL_WIDTH+1,
-				m.getCols()*Maze.CELL_HEIGHT+1));
+		setPreferredSize(new Dimension(m.getOptions().getSizeX()*Maze.CELL_WIDTH+1,
+				m.getOptions().getSizeY()*Maze.CELL_HEIGHT+1));
 	}
 	
 	public void restart(){
@@ -53,8 +53,8 @@ public class MazePanel extends JPanel {
 	}
 	
 	public void resize(){
-		setPreferredSize(new Dimension(maze.getRows()*Maze.CELL_WIDTH+1,
-				maze.getCols()*Maze.CELL_HEIGHT+1));
+		setPreferredSize(new Dimension(maze.getOptions().getSizeX()*Maze.CELL_WIDTH+1,
+				maze.getOptions().getSizeY()*Maze.CELL_HEIGHT+1));
 		repaint();
 	}
 	

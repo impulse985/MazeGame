@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 Jeff Thompson.
+ * Copyright 2015 Jeffery Thompson.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,22 +23,20 @@
  */
 package mazegame;
 
-import mazegame.player.PlayerList;
-import mazegame.player.Player;
-import java.awt.Color;
-import mazegame.gui.MazeFrame;
-
 /**
  *
- * @author Jeff
+ * @author Jeffery Thompson
  */
-public class MazeGame {
-    public static void main(String[] args) {
-		MazeOptions options = new MazeOptions(10,10);
-		Maze m = new Maze(options);
-		//m.setGoalCell(m.getCell(2, 2));
-		PlayerList.add(new Player(m,Color.red));
-		//PlayerList.add(new Player(m,Color.red,m.getCell(20,20)));
-	    MazeFrame mf = new MazeFrame(m);
-    }
-}
+public class Point{
+		int x, y;
+		public Point(int x, int y){
+			this.x = x;
+			this.y = y;
+		}
+		public int getX(){
+			return x;
+		}
+		public int getY(){
+			return y;
+		}
+	}

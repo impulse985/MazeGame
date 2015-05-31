@@ -118,7 +118,7 @@ public class MazeFrame extends JFrame {
 			if(ae.getActionCommand().equals("New..."))
 			{
 				//NewMazeDialog n = new NewMazeDialog(MazeFrame.this);
-				maze = new Maze(maze.getRows(), maze.getCols());
+				maze = new Maze(maze.getOptions());
 				//maze.setGoalCell(maze.getCell(10, 10));
 				panel.setMaze(maze);
 				PlayerList.setMaze(maze);
@@ -155,26 +155,34 @@ public class MazeFrame extends JFrame {
 			public void keyPressed(KeyEvent ke) {
 				switch(ke.getKeyCode()) {
 					case KeyEvent.VK_UP:
-						PlayerList.get(1).move(Direction.NORTH);
-						break;
+						if(PlayerList.get(1)!=null){
+							PlayerList.get(1).move(Direction.NORTH);
+							break;
+						}
 					case KeyEvent.VK_W:
 						PlayerList.get(0).move(Direction.NORTH);
 						break;
 					case KeyEvent.VK_DOWN:
-						PlayerList.get(1).move(Direction.SOUTH);
-						break;
+						if(PlayerList.get(1)!=null){
+							PlayerList.get(1).move(Direction.SOUTH);
+							break;
+						}
 					case KeyEvent.VK_S:
 						PlayerList.get(0).move(Direction.SOUTH);
 						break;
 					case KeyEvent.VK_LEFT:
-						PlayerList.get(1).move(Direction.WEST);
-						break;
+						if(PlayerList.get(1)!=null){
+							PlayerList.get(1).move(Direction.WEST);
+							break;
+						}
 					case KeyEvent.VK_A:
 						PlayerList.get(0).move(Direction.WEST);
 						break;
 					case KeyEvent.VK_RIGHT:
-						PlayerList.get(1).move(Direction.EAST);
-						break;
+						if(PlayerList.get(1)!=null){
+							PlayerList.get(1).move(Direction.EAST);
+							break;
+						}
 					case KeyEvent.VK_D:
 						PlayerList.get(0).move(Direction.EAST);
 						break;

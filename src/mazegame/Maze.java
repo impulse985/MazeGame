@@ -25,13 +25,9 @@ package mazegame;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.Iterator;
 import java.util.Map;
-import javax.swing.JOptionPane;
+import mazegame.MazeOptions.Algorithm;
 
 /**
  * A class that stores and manipulates a maze. The maze is represented by a grid
@@ -43,32 +39,23 @@ import javax.swing.JOptionPane;
  */
 public class Maze {
 	private Cell[][] grid;
-	private int rowX; // Number of cells in a row
-	private int colY; // Number of cells in a column
-	
-	private Cell start, goal;
+	private MazeOptions options;
 	
 	public static int CELL_WIDTH = 16;
 	public static int CELL_HEIGHT = 16;
 	
-	public Maze(int r, int c){
-		rowX = r;
-		colY = c;
-		grid = new Cell[rowX][colY];
-		for(int i = 0; i < rowX; i++)
-			for(int j = 0; j < colY; j++)
+	public Maze(MazeOptions o){
+		this.options = o;
+		grid = new Cell[options.getSizeX()][options.getSizeY()];
+		for(int i = 0; i < options.getSizeX(); i++)
+			for(int j = 0; j < options.getSizeY(); j++)
 				grid[i][j] = new Cell(i, j);
-		start = grid[0][0];
-		goal = grid[rowX-1][colY-1];
 		
-		MazeGenerator.generateMaze(this);
+		MazeGenerator.generateMaze(this, Algorithm.DFS);
 	}
 	
-	public int getRows(){
-		return rowX;
-	}
-	public int getCols(){
-		return colY;
+	public MazeOptions getOptions(){
+		return options;
 	}
 	
 	/**
@@ -78,51 +65,48 @@ public class Maze {
 	 * @return 
 	 */
 	public Cell getCell(int x, int y){
-		if(x >= rowX || y >= colY || x < 0 || y < 0) return null;
+		if(x >= options.getSizeX() || y >= options.getSizeY() || x < 0 || y < 0) return null;
 		return grid[x][y];
 	}
-	
-	public Cell getStartCell(){
-		return start;
-	}
-	public void setStartCell(Cell c){
-		start = c;
-	}
-	
-	public Cell getGoalCell(){
-		return goal;
-	}
-	public void setGoalCell(Cell c){
-		goal = c;
+	/**
+	 * Gets the Cell of the maze at position (x,y). The x position is the 
+	 * @param p Point of the Cell
+	 * @return Cell at Point p
+	 */
+	public Cell getCell(Point p){
+		if(p.x >= options.getSizeX() || p.y >= options.getSizeY() || p.x < 0 || p.y < 0) return null;
+		return grid[p.x][p.y];
 	}
 	
 	public void paint(Graphics2D g){
-		for(int i = 0; i < rowX; i++)
-			for(int j = 0; j < colY; j++){
+		for(int i = 0; i < options.getSizeX(); i++)
+			for(int j = 0; j < options.getSizeY(); j++){
 				if(grid[i][j] != null) grid[i][j].paint(g);
 			}
 	}
 	
 	public class Cell {
 		Map<Direction, Boolean> wall;
-		int posX;
-		int posY;
+		Point pos;
 		boolean visited;
 		
 		public Cell(int i, int j){
 			wall = new EnumMap(Direction.class);
 			for(Direction dir:Direction.values())
 				wall.put(dir, Boolean.TRUE);
-			posX = i;
-			posY = j;
+			pos = new Point(i,j);
+			visited = false;
+		}
+		public Cell(Point p){
+			wall = new EnumMap(Direction.class);
+			for(Direction dir:Direction.values())
+				wall.put(dir, Boolean.TRUE);
+			pos = p;
 			visited = false;
 		}
 		
-		public int getX(){
-			return posX;
-		}
-		public int getY(){
-			return posY;
+		public Point getPos(){
+			return pos;
 		}
 		public Map<Direction, Boolean> getWalls(){
 			return wall;
@@ -132,14 +116,14 @@ public class Maze {
 			return getNeighbor(dir) != null;
 		}
 		public Cell getNeighbor(Direction dir){
-			if(dir == Direction.NORTH && posY > 0)
-				return grid[posX][posY-1];
-			if(dir == Direction.SOUTH && posY < colY-1)
-				return grid[posX][posY+1];
-			if(dir == Direction.EAST && posX < rowX-1)
-				return grid[posX+1][posY];
-			if(dir == Direction.WEST && posX > 0)
-				return grid[posX-1][posY];
+			if(dir == Direction.NORTH && pos.y > 0)
+				return grid[pos.x][pos.y-1];
+			if(dir == Direction.SOUTH && pos.y < options.getSizeY()-1)
+				return grid[pos.x][pos.y+1];
+			if(dir == Direction.EAST && pos.x < options.getSizeX()-1)
+				return grid[pos.x+1][pos.y];
+			if(dir == Direction.WEST && pos.x > 0)
+				return grid[pos.x-1][pos.y];
 			return null;
 		}
 		
@@ -169,29 +153,29 @@ public class Maze {
 		
 		public void paint(Graphics2D g){
 			g.setColor(Color.white);
-			g.fillRect(posX*CELL_WIDTH+1, posY*CELL_HEIGHT+1, 
+			g.fillRect(pos.x*CELL_WIDTH+1, pos.y*CELL_HEIGHT+1, 
 					CELL_WIDTH, CELL_HEIGHT);
 			g.setColor(Color.black);
 			//draw checkerboard goal
-			if(this == goal){
+			if(this == getCell(options.getGoal())){
 				for(int i = 0; i < 4; i++) 
 					for(int j = 0; j < 4; j++)
 						if(i%2==j%2)
-							g.fillRect(posX*CELL_WIDTH+i*CELL_WIDTH/4, posY*CELL_HEIGHT+j*CELL_HEIGHT/4,
+							g.fillRect(pos.x*CELL_WIDTH+i*CELL_WIDTH/4, pos.y*CELL_HEIGHT+j*CELL_HEIGHT/4,
 									CELL_WIDTH/4, CELL_HEIGHT/4);
 			}
 			if(wall.get(Direction.NORTH))
-				g.drawLine(posX*CELL_WIDTH, posY*CELL_HEIGHT,
-					(posX+1)*CELL_WIDTH, posY*CELL_HEIGHT);
+				g.drawLine(pos.x*CELL_WIDTH, pos.y*CELL_HEIGHT,
+					(pos.x+1)*CELL_WIDTH, pos.y*CELL_HEIGHT);
 			if(wall.get(Direction.EAST))
-				g.drawLine((posX+1)*CELL_WIDTH, posY*CELL_HEIGHT,
-					(posX+1)*CELL_WIDTH, (posY+1)*CELL_HEIGHT);
+				g.drawLine((pos.x+1)*CELL_WIDTH, pos.y*CELL_HEIGHT,
+					(pos.x+1)*CELL_WIDTH, (pos.y+1)*CELL_HEIGHT);
 			if(wall.get(Direction.SOUTH))
-				g.drawLine(posX*CELL_WIDTH, (posY+1)*CELL_HEIGHT,
-					(posX+1)*CELL_WIDTH, (posY+1)*CELL_HEIGHT);
+				g.drawLine(pos.x*CELL_WIDTH, (pos.y+1)*CELL_HEIGHT,
+					(pos.x+1)*CELL_WIDTH, (pos.y+1)*CELL_HEIGHT);
 			if(wall.get(Direction.WEST))
-				g.drawLine(posX*CELL_WIDTH, posY*CELL_HEIGHT,
-					posX*CELL_WIDTH, (posY+1)*CELL_HEIGHT);
+				g.drawLine(pos.x*CELL_WIDTH, pos.y*CELL_HEIGHT,
+					pos.x*CELL_WIDTH, (pos.y+1)*CELL_HEIGHT);
 		}
 	}
 }

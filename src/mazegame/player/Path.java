@@ -26,7 +26,6 @@ package mazegame.player;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Stack;
 import mazegame.Direction;
 import mazegame.Maze;
@@ -97,39 +96,39 @@ public class Path {
 		
 		@Override
 		public int hashCode(){
-			return (point.getX()<<16)+point.getY();
+			return (point.getPos().getX() <<16)+point.getPos().getY();
 		}
 		
 		@Override
 		public boolean equals(Object o){
 			if(!o.getClass().equals(PathPoint.class)) return false;
 			PathPoint p = (PathPoint)o;
-			return p.point.getX() == point.getX() && p.point.getY() == point.getY();
+			return p.point.getPos().getX() == point.getPos().getX() && p.point.getPos().getY() == point.getPos().getY();
 		}
 		
 		public void paint(Graphics2D g){
-			g.fillRect(point.getX()*Maze.CELL_WIDTH + (Maze.CELL_WIDTH-pathWidth-1)/2+1,
-				   point.getY()*Maze.CELL_HEIGHT + (Maze.CELL_HEIGHT-pathWidth-1)/2+1,
+			g.fillRect(point.getPos().getX()*Maze.CELL_WIDTH + (Maze.CELL_WIDTH-pathWidth-1)/2+1,
+				   point.getPos().getY()*Maze.CELL_HEIGHT + (Maze.CELL_HEIGHT-pathWidth-1)/2+1,
 				   pathWidth, pathWidth);
 			switch(dir){
 				case NORTH:
-					g.fillRect(point.getX()*Maze.CELL_WIDTH + (Maze.CELL_WIDTH-pathWidth-1)/2+1,
-							point.getY()*Maze.CELL_HEIGHT - (Maze.CELL_HEIGHT-pathWidth-1)/2,
+					g.fillRect(point.getPos().getX()*Maze.CELL_WIDTH + (Maze.CELL_WIDTH-pathWidth-1)/2+1,
+							point.getPos().getY()*Maze.CELL_HEIGHT - (Maze.CELL_HEIGHT-pathWidth-1)/2,
 							pathWidth, Maze.CELL_HEIGHT-pathWidth);
 					break;
 				case SOUTH:
-					g.fillRect(point.getX()*Maze.CELL_WIDTH + (Maze.CELL_WIDTH-pathWidth-1)/2+1,
-							(point.getY()+1)*Maze.CELL_HEIGHT - (Maze.CELL_HEIGHT-pathWidth-1)/2,
+					g.fillRect(point.getPos().getX()*Maze.CELL_WIDTH + (Maze.CELL_WIDTH-pathWidth-1)/2+1,
+							(point.getPos().getY()+1)*Maze.CELL_HEIGHT - (Maze.CELL_HEIGHT-pathWidth-1)/2,
 							pathWidth, Maze.CELL_HEIGHT-pathWidth);
 					break;
 				case EAST:
-					g.fillRect((point.getX()+1)*Maze.CELL_WIDTH - (Maze.CELL_WIDTH-pathWidth-1)/2,
-							point.getY()*Maze.CELL_HEIGHT + (Maze.CELL_HEIGHT-pathWidth-1)/2 +1,
+					g.fillRect((point.getPos().getX()+1)*Maze.CELL_WIDTH - (Maze.CELL_WIDTH-pathWidth-1)/2,
+							point.getPos().getY()*Maze.CELL_HEIGHT + (Maze.CELL_HEIGHT-pathWidth-1)/2 +1,
 							Maze.CELL_WIDTH-pathWidth, pathWidth);
 					break;
 				case WEST:
-					g.fillRect(point.getX()*Maze.CELL_WIDTH - (Maze.CELL_WIDTH-pathWidth-1)/2,
-							point.getY()*Maze.CELL_HEIGHT + (Maze.CELL_HEIGHT-pathWidth-1)/2 + 1,
+					g.fillRect(point.getPos().getX()*Maze.CELL_WIDTH - (Maze.CELL_WIDTH-pathWidth-1)/2,
+							point.getPos().getY()*Maze.CELL_HEIGHT + (Maze.CELL_HEIGHT-pathWidth-1)/2 + 1,
 							Maze.CELL_WIDTH-pathWidth, pathWidth);
 					break;
 			}

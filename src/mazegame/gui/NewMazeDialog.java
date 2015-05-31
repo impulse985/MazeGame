@@ -41,6 +41,7 @@ public class NewMazeDialog extends JDialog {
 	}
 	
 	public MazeOptions showDialog(){
+		this.setVisible(true);
 		return options;
 	}
 	
