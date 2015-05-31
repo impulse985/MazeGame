@@ -29,6 +29,7 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 import mazegame.Maze;
 import mazegame.Player;
+import mazegame.PlayerList;
 
 /**
  *
@@ -36,17 +37,16 @@ import mazegame.Player;
  */
 public class MazePanel extends JPanel {
 	Maze maze;
-	Player player;
 	
-	public MazePanel(Maze m, Player p){
+	public MazePanel(Maze m){
 		maze = m;
-		player = p;
 		setPreferredSize(new Dimension(m.getRows()*Maze.CELL_WIDTH+1,
 				m.getCols()*Maze.CELL_HEIGHT+1));
 	}
 	
 	public void restart(){
-		player.restart();
+		for(Player p : PlayerList.getPlayers())
+			p.restart();
 	}
 	public void setMaze(Maze m){
 		maze = m;
@@ -58,15 +58,12 @@ public class MazePanel extends JPanel {
 		repaint();
 	}
 	
-	public void setPlayer(Player p){
-		player = p;
-	}
-	
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D)g;
 		maze.paint(g2);
-		player.paint(g2);
+		for(Player p : PlayerList.getPlayers())
+			p.paint(g2);
 	}
 }

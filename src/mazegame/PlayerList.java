@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 Jeff Thompson.
+ * Copyright 2015 Jeffery Thompson.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,19 +23,36 @@
  */
 package mazegame;
 
-import java.awt.Color;
-import mazegame.gui.MazeFrame;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- *
- * @author Jeff
+ * A class to maintain a list of all Players in the current maze.
+ * @author Jeffery Thompson
  */
-public class MazeGame {
-	public static int ROWS = 30;
-	public static int COLS = 30;
-    public static void main(String[] args) {
-		Maze m = new Maze(20,20);
-		PlayerList.add(new Player(m,Color.blue));
-	    MazeFrame mf = new MazeFrame(m);
-    }
+public class PlayerList {
+	private static final Map<Integer, Player> player = new HashMap();
+	private static int numPlayers = 0;
+	public static void add(Player p){
+		player.put(++numPlayers,p);
+	}
+	
+	/**
+	 * Returns the Player with the given player number.
+	 * @param i player number
+	 * @return 
+	 */
+	public static Player get(int i){
+		return player.get(i);
+	}
+	
+	public static Collection<Player> getPlayers(){
+		return player.values();
+	}
+	public static void setMaze(Maze m){
+		for(Player p : player.values()){
+			p.setMaze(m);
+		}
+	}
 }

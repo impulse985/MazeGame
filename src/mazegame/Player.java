@@ -64,10 +64,12 @@ public class Player {
 		startTime = Instant.now();
 	}
 	
-	public Player(Maze m, int x, int y){
+	public Player(Maze m, Color c){
 		maze = m;
-		pos = m.getCell(x, y);
-		playerColor = Color.blue;
+		pos = m.getStartCell();
+		playerColor = c;
+		path = new Path(playerColor, Color.yellow);
+		startTime = Instant.now();
 	}
 	
 	/**
@@ -90,6 +92,14 @@ public class Player {
 	public Duration getTime(){
 		if(finished) return Duration.between(startTime, finishTime);
 		else return Duration.between(startTime, Instant.now());
+	}
+	
+	public void setMaze(Maze m){
+		maze = m;
+		finished = false;
+		pos = m.getStartCell();
+		path = new Path(playerColor, Color.yellow);
+		startTime = Instant.now();
 	}
 	
 	/**
@@ -137,6 +147,7 @@ public class Player {
 	 */
 	public void restart(){
 		pos = maze.getStartCell();
+		finished = false;
 		startTime = Instant.now();
 	}
 	

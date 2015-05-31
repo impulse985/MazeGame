@@ -38,8 +38,8 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import mazegame.Direction;
 import mazegame.Maze;
-import mazegame.MazeGame;
 import mazegame.Player;
+import mazegame.PlayerList;
 
 /**
  *
@@ -49,11 +49,9 @@ public class MazeFrame extends JFrame {
 	MazePanel panel;
 	Maze maze;
 	
-	Player player;
-	public MazeFrame(Maze m, Player p) {
+	public MazeFrame(Maze m) {
 		maze = m;
-		player = p;
-		panel = new MazePanel(m, p);
+		panel = new MazePanel(m);
 		this.setContentPane(panel);
 		
 		this.setJMenuBar(createMenuBar());
@@ -99,17 +97,12 @@ public class MazeFrame extends JFrame {
 		return bar;
 	}
 	
-	public void setPlayer(Player p){
-		player = p;
-		panel.setPlayer(p);
-	}
-	
 	public void resize(){
 		panel.resize();
 		this.pack();
 	}
 	
-	public void winMessage(){
+	public void winMessage(Player player){
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("mm:ss");
 		Duration time = player.getTime();
 		String minutes = (time.toMinutes() < 10 ? "0": "") + time.toMinutes();
@@ -124,9 +117,9 @@ public class MazeFrame extends JFrame {
 		public void actionPerformed(ActionEvent ae) {
 			if(ae.getActionCommand().equals("New..."))
 			{
-				maze = new Maze(MazeGame.ROWS, MazeGame.COLS);
+				maze = new Maze(maze.getRows(), maze.getCols());
 				panel.setMaze(maze);
-				setPlayer(new Player(maze));
+				PlayerList.setMaze(maze);
 				panel.resize();
 				panel.repaint();
 			}
@@ -151,34 +144,76 @@ public class MazeFrame extends JFrame {
 	
 	public class KeyboardInput implements KeyListener {
 			@Override
-			public void keyTyped(KeyEvent ke) {}
+			public void keyTyped(KeyEvent ke) {
+				switch(ke.getKeyChar()) {
+						case KeyEvent.VK_UP:
+							PlayerList.get(1).move(Direction.NORTH);
+							break;
+						case 'w':
+							PlayerList.get(0).move(Direction.NORTH);
+							break;
+						case KeyEvent.VK_DOWN:
+							PlayerList.get(1).move(Direction.SOUTH);
+							break;
+						case 's':
+							PlayerList.get(0).move(Direction.SOUTH);
+							break;
+						case KeyEvent.VK_LEFT:
+							PlayerList.get(1).move(Direction.WEST);
+							break;
+						case 'a':
+							PlayerList.get(0).move(Direction.WEST);
+							break;
+						case KeyEvent.VK_RIGHT:
+							PlayerList.get(1).move(Direction.EAST);
+							break;
+						case 'd':
+							PlayerList.get(0).move(Direction.EAST);
+							break;
+						default:
+							break;
+				}
+				panel.repaint();
+				for(Player p : PlayerList.getPlayers())
+					if(!p.hasFinished() && p.checkWin())
+						winMessage(p);
+			}
 
 			@Override
 			public void keyPressed(KeyEvent ke) {
 				switch(ke.getKeyCode()) {
 					case KeyEvent.VK_UP:
+						PlayerList.get(1).move(Direction.NORTH);
+						break;
 					case KeyEvent.VK_W:
-						player.move(Direction.NORTH);
+						PlayerList.get(0).move(Direction.NORTH);
 						break;
 					case KeyEvent.VK_DOWN:
+						PlayerList.get(1).move(Direction.SOUTH);
+						break;
 					case KeyEvent.VK_S:
-						player.move(Direction.SOUTH);
+						PlayerList.get(0).move(Direction.SOUTH);
 						break;
 					case KeyEvent.VK_LEFT:
+						PlayerList.get(1).move(Direction.WEST);
+						break;
 					case KeyEvent.VK_A:
-						player.move(Direction.WEST);
+						PlayerList.get(0).move(Direction.WEST);
 						break;
 					case KeyEvent.VK_RIGHT:
+						PlayerList.get(1).move(Direction.EAST);
+						break;
 					case KeyEvent.VK_D:
-						player.move(Direction.EAST);
+						PlayerList.get(0).move(Direction.EAST);
 						break;
 					default:
 						break;
 				}
 				
 				panel.repaint();
-				if(!player.hasFinished() && player.checkWin())
-					winMessage();
+				for(Player p : PlayerList.getPlayers())
+					if(!p.hasFinished() && p.checkWin())
+						winMessage(p);
 			}
 			@Override
 			public void keyReleased(KeyEvent ke) {}
