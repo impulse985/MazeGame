@@ -61,6 +61,10 @@ public class MazeOptions {
 	}
 	public void setStart(Point p){
 		start = p;
+		if(start.x >= sizeX) start.x = sizeX-1;
+		if(start.x < 0) start.x = 0;
+		if(start.y >= sizeY) start.y = sizeY-1;
+		if(start.y < 0) start.y = 0;
 	}
 	
 	public Point getGoal(){
@@ -68,9 +72,25 @@ public class MazeOptions {
 	}
 	public void setGoal(Point p){
 		goal = p;
+		if(goal.x >= sizeX) goal.x = sizeX-1;
+		if(goal.x < 0) goal.x = 0;
+		if(goal.y >= sizeY) goal.y = sizeY-1;
+		if(goal.y < 0) goal.y = 0;
 	}
 	
 	public enum Algorithm {
 		DFS,PRIM;
+		
+		@Override
+		public String toString(){
+			switch(this){
+				case DFS:
+					return "Depth-first Search";
+				case PRIM:
+					return "Prim's Algorithm";
+				default:
+					return null;
+			}
+		}
 	}
 }

@@ -38,6 +38,7 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import mazegame.Direction;
 import mazegame.Maze;
+import mazegame.MazeOptions;
 import mazegame.player.Player;
 import mazegame.player.PlayerList;
 
@@ -117,13 +118,15 @@ public class MazeFrame extends JFrame {
 		public void actionPerformed(ActionEvent ae) {
 			if(ae.getActionCommand().equals("New..."))
 			{
-				//NewMazeDialog n = new NewMazeDialog(MazeFrame.this);
-				maze = new Maze(maze.getOptions());
-				//maze.setGoalCell(maze.getCell(10, 10));
-				panel.setMaze(maze);
-				PlayerList.setMaze(maze);
-				panel.resize();
-				panel.repaint();
+				NewMazeDialog dialog = new NewMazeDialog(MazeFrame.this,maze.getOptions());
+				if(dialog.showDialog() != null){
+					maze = new Maze(dialog.getOptions());
+					panel.setMaze(maze);
+					PlayerList.setMaze(maze);
+					panel.resize();
+					panel.repaint();
+					MazeFrame.this.pack();
+				}
 			}
 			if(ae.getActionCommand().equals("Restart"))
 			{
