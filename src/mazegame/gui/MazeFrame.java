@@ -30,15 +30,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import mazegame.Direction;
 import mazegame.Maze;
-import mazegame.MazeOptions;
 import mazegame.player.Player;
 import mazegame.player.PlayerList;
 
@@ -49,6 +50,8 @@ import mazegame.player.PlayerList;
 public class MazeFrame extends JFrame {
 	MazePanel panel;
 	Maze maze;
+	
+	JCheckBoxMenuItem blockView;
 	
 	public MazeFrame(Maze m) {
 		maze = m;
@@ -66,7 +69,7 @@ public class MazeFrame extends JFrame {
 		this.requestFocus();
 	}
         
-	public final JMenuBar createMenuBar(){
+	private JMenuBar createMenuBar(){
 		JMenuBar bar = new JMenuBar();
 
 		JMenu maze = new JMenu("Maze");
@@ -92,6 +95,19 @@ public class MazeFrame extends JFrame {
 		JMenuItem zoomOut = new JMenuItem("Zoom out");
 		zoomOut.addActionListener(listener);
 		view.add(zoomOut);
+		view.add(new JSeparator());
+		
+		blockView = new JCheckBoxMenuItem("Block view");
+		blockView.addActionListener(listener);
+		view.add(blockView);
+		
+		JMenuItem increaseView = new JMenuItem("Increase view distance");
+		increaseView.addActionListener(listener);
+		view.add(increaseView);
+		
+		JMenuItem decreaseView = new JMenuItem("Decrease view distance");
+		decreaseView.addActionListener(listener);
+		view.add(decreaseView);
 		
 		bar.add(maze);
 		bar.add(view);
@@ -144,6 +160,10 @@ public class MazeFrame extends JFrame {
 				Maze.CELL_WIDTH /= 1.25;
 				Maze.CELL_HEIGHT /= 1.25;
 				resize();
+			}
+			if(ae.getActionCommand().equals("Block view"))
+			{
+				
 			}
 		}
 	}

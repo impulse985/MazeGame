@@ -42,10 +42,9 @@ import mazegame.Point;
  * @author Jeffery Thompson
  */
 public class Player {
-	
 	private Maze maze;
-	private Cell start;
-	private Cell pos;
+	private Point start;
+	private Point pos;
 	private Path path;
 	
 	private Instant startTime, finishTime;
@@ -59,7 +58,7 @@ public class Player {
 	 */
 	public Player(Maze m){
 		maze = m;
-		start = m.getCell(m.getOptions().getStart());
+		start = m.getOptions().getStart();
 		pos = start;
 		playerColor = Color.blue;
 		path = new Path(playerColor, Color.yellow);
@@ -68,7 +67,7 @@ public class Player {
 	
 	public Player(Maze m, Color c){
 		maze = m;
-		start = m.getCell(m.getOptions().getStart());
+		start = m.getOptions().getStart();
 		pos = start;
 		playerColor = c;
 		path = new Path(playerColor, Color.yellow);
@@ -77,7 +76,7 @@ public class Player {
 	
 	public Player(Maze m, Color c, Point s){
 		maze = m;
-		start = m.getCell(s);
+		start = s;
 		pos = start;
 		playerColor = c;
 		path = new Path(playerColor, Color.yellow);
@@ -95,9 +94,13 @@ public class Player {
 		playerColor = c;
 	}
 	
+	public Point getPos(){
+		return pos;
+	}
+	
 	public void setStart(Point s){
 		if(maze.getCell(s) != null)
-			start = maze.getCell(s);
+			start = s;
 	}
 	
 	/**
@@ -113,12 +116,12 @@ public class Player {
 	
 	public void setMaze(Maze m){
 		int startX, startY;
-		if(start.getPos().getX() >= m.getOptions().getSizeX()) startX = m.getOptions().getSizeX()-1;
-		else startX = start.getPos().getX();
-		if(start.getPos().getY() >= m.getOptions().getSizeY()) startY = m.getOptions().getSizeY()-1;
-		else startY = start.getPos().getY();
+		if(start.getX() >= m.getOptions().getSizeX()) startX = m.getOptions().getSizeX()-1;
+		else startX = start.getX();
+		if(start.getY() >= m.getOptions().getSizeY()) startY = m.getOptions().getSizeY()-1;
+		else startY = start.getY();
 		maze = m;
-		start = m.getCell(startX, startY);
+		start = new Point(startX, startY);
 		restart();
 	}
 	
@@ -133,10 +136,10 @@ public class Player {
 	 * @return true if the player moved successfully, false otherwise
 	 */
 	public boolean move(Direction dir){
-		if(pos.hasNeighbor(dir) && !pos.getWalls().get(dir) && !finished)
+		if(maze.getCell(pos).hasNeighbor(dir) && !maze.getCell(pos).getWalls().get(dir) && !finished)
 		{
 			path.add(pos,dir);
-			pos = pos.getNeighbor(dir);
+			pos = maze.getCell(pos).getNeighbor(dir).getPos();
 			return true;
 		}
 		return false;
@@ -149,7 +152,7 @@ public class Player {
 	 * @return true if the Player is at the goal, false otherwise
 	 */
 	public boolean checkWin(){
-		if(pos.equals(maze.getCell(maze.getOptions().getGoal())))
+		if(pos.equals(maze.getOptions().getGoal()))
 		{
 			finishTime = Instant.now();
 			finished = true;
@@ -176,12 +179,12 @@ public class Player {
 		path.paint(g);
 		
 		g.setColor(playerColor);
-		g.fillRect(start.getPos().getX()*Maze.CELL_WIDTH+1, start.getPos().getY()*Maze.CELL_HEIGHT+1, 
-					Maze.CELL_WIDTH-1, Maze.CELL_HEIGHT-1);
+		g.fillRect(start.getX()*Maze.CELL_WIDTH+1, start.getY()*Maze.CELL_HEIGHT+1, 
+				Maze.CELL_WIDTH-1, Maze.CELL_HEIGHT-1);
 		
 		g.setColor(playerColor);
-		g.fillRect(pos.getPos().getX()*Maze.CELL_WIDTH + 3,
-				   pos.getPos().getY()*Maze.CELL_HEIGHT + 3,
-				   Maze.CELL_WIDTH -5, Maze.CELL_HEIGHT-5);
+		g.fillRect(pos.getX()*Maze.CELL_WIDTH + 3,
+				pos.getY()*Maze.CELL_HEIGHT + 3,
+				Maze.CELL_WIDTH -5, Maze.CELL_HEIGHT-5);
 	}
 }

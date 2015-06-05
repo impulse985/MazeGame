@@ -36,7 +36,6 @@ public class MazeGame {
     public static void main(String[] args) {
 		MazeOptions options = new MazeOptions(10,10);
 		Maze m = new Maze(options);
-		//m.setGoalCell(m.getCell(2, 2));
 		PlayerList.add(new Player(m,Color.red));
 		//PlayerList.add(new Player(m,Color.red,m.getCell(20,20)));
 	    MazeFrame mf = new MazeFrame(m);

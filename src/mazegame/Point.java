@@ -39,4 +39,32 @@ public class Point{
 		public int getY(){
 			return y;
 		}
+		
+		public Point getNeighbor(Direction dir){
+			switch(dir){
+				case NORTH:
+					return new Point(x,y-1);
+				case SOUTH:
+					return new Point(x,y+1);
+				case EAST:
+					return new Point(x+1,y);
+				case WEST:
+					return new Point(x-1,y);
+				default:
+					return null;
+			}
+		}
+		
+		@Override
+		public int hashCode(){
+			return (x <<16)+y;
+		}
+		
+		@Override
+		public boolean equals(Object o){
+			if(o==this) return true;
+			if(!o.getClass().equals(Point.class)) return false;
+			Point p = (Point) o;
+			return p.x == this.x && p.y == this.y;
+		}
 	}

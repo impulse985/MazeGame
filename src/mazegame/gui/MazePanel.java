@@ -23,9 +23,13 @@
  */
 package mazegame.gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import javax.swing.JPanel;
 import mazegame.Maze;
 import mazegame.player.Player;
@@ -37,7 +41,7 @@ import mazegame.player.PlayerList;
  */
 public class MazePanel extends JPanel {
 	Maze maze;
-	
+	public static int viewSize = 3;
 	public MazePanel(Maze m){
 		maze = m;
 		setPreferredSize(new Dimension(m.getOptions().getSizeX()*Maze.CELL_WIDTH+1,
@@ -63,7 +67,25 @@ public class MazePanel extends JPanel {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D)g;
 		maze.paint(g2);
-		for(Player p : PlayerList.getPlayers())
+		
+		Area blackout = new Area(new Rectangle2D.Double(0,0,
+				Maze.CELL_WIDTH*maze.getOptions().getSizeX(),
+				Maze.CELL_WIDTH*maze.getOptions().getSizeY()));
+		boolean allFinished = true;
+		for(Player p : PlayerList.getPlayers()) {
 			p.paint(g2);
+			Ellipse2D view = new Ellipse2D.Double(
+					(p.getPos().getX() - viewSize)*Maze.CELL_WIDTH+Maze.CELL_WIDTH/2, 
+					(p.getPos().getY() - viewSize)*Maze.CELL_HEIGHT+Maze.CELL_HEIGHT/2,
+					2*viewSize*Maze.CELL_WIDTH, 2*viewSize*Maze.CELL_HEIGHT);
+			Area viewArea = new Area(view);
+			if(!p.hasFinished()) {
+				blackout.subtract(viewArea);
+				allFinished = false;
+			}
+		}
+		g2.setColor(Color.black);
+		
+		if(!allFinished) g2.fill(blackout);
 	}
 }
