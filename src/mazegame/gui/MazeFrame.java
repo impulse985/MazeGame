@@ -52,6 +52,7 @@ public class MazeFrame extends JFrame {
 	Maze maze;
 	
 	JCheckBoxMenuItem blockView;
+	JMenuItem increaseView, decreaseView;
 	
 	public MazeFrame(Maze m) {
 		maze = m;
@@ -101,12 +102,14 @@ public class MazeFrame extends JFrame {
 		blockView.addActionListener(listener);
 		view.add(blockView);
 		
-		JMenuItem increaseView = new JMenuItem("Increase view distance");
+		increaseView = new JMenuItem("Increase view distance");
 		increaseView.addActionListener(listener);
+		increaseView.setEnabled(false);
 		view.add(increaseView);
 		
-		JMenuItem decreaseView = new JMenuItem("Decrease view distance");
+		decreaseView = new JMenuItem("Decrease view distance");
 		decreaseView.addActionListener(listener);
+		decreaseView.setEnabled(false);
 		view.add(decreaseView);
 		
 		bar.add(maze);
@@ -132,39 +135,46 @@ public class MazeFrame extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent ae) {
-			if(ae.getActionCommand().equals("New..."))
-			{
-				NewMazeDialog dialog = new NewMazeDialog(MazeFrame.this,maze.getOptions());
-				if(dialog.showDialog() != null){
-					maze = new Maze(dialog.getOptions());
-					panel.setMaze(maze);
-					PlayerList.setMaze(maze);
-					panel.resize();
+			switch(ae.getActionCommand()){
+				case "New...":
+					NewMazeDialog dialog = new NewMazeDialog(MazeFrame.this,maze.getOptions());
+					if(dialog.showDialog() != null){
+						maze = new Maze(dialog.getOptions());
+						panel.setMaze(maze);
+						PlayerList.setMaze(maze);
+						panel.resize();
+						panel.repaint();
+						MazeFrame.this.pack();
+					}
+					break;
+				case "Restart":
+					panel.restart();
 					panel.repaint();
-					MazeFrame.this.pack();
-				}
-			}
-			if(ae.getActionCommand().equals("Restart"))
-			{
-				panel.restart();
-				panel.repaint();
-			}
-			if(ae.getActionCommand().equals("Zoom in"))
-			{
-				Maze.CELL_WIDTH *= 1.25;
-				Maze.CELL_HEIGHT *= 1.25;
-				resize();
-			}
-			if(ae.getActionCommand().equals("Zoom out"))
-			{
-				Maze.CELL_WIDTH /= 1.25;
-				Maze.CELL_HEIGHT /= 1.25;
-				resize();
-			}
-			if(ae.getActionCommand().equals("Block view"))
-			{
-				
-			}
+					break;
+				case "Zoom in":
+					Maze.CELL_WIDTH *= 1.25;
+					Maze.CELL_HEIGHT *= 1.25;
+					resize();
+					break;
+				case "Zoom out":
+					Maze.CELL_WIDTH /= 1.25;
+					Maze.CELL_HEIGHT /= 1.25;
+					resize();
+					break;
+				case "Block view":
+					increaseView.setEnabled(blockView.isSelected());
+					decreaseView.setEnabled(blockView.isSelected());
+					panel.setBlockView(blockView.isSelected());	
+					panel.repaint();
+					break;
+				case "Increase view distance":
+					panel.increaseViewSize();
+					break;
+				case "Decrease view distance":
+					panel.decreaseViewSize();
+					break;
+			}	
+			
 		}
 	}
 	

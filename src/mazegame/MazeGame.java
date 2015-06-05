@@ -34,10 +34,11 @@ import mazegame.gui.MazeFrame;
  */
 public class MazeGame {
     public static void main(String[] args) {
-		MazeOptions options = new MazeOptions(10,10);
+		MazeOptions options = new MazeOptions(21,21);
+		options.setGoal(new Point(10,10));
 		Maze m = new Maze(options);
 		PlayerList.add(new Player(m,Color.red));
-		//PlayerList.add(new Player(m,Color.red,m.getCell(20,20)));
+		PlayerList.add(new Player(m,Color.blue,new Point(20,20)));
 	    MazeFrame mf = new MazeFrame(m);
     }
 }
