@@ -40,8 +40,12 @@ import mazegame.player.PlayerList;
  * @author Jeff
  */
 public class MazePanel extends JPanel {
+	
 	Maze maze;
-	public static int viewSize = 3;
+	
+	boolean blockView = false;
+	private int viewSize = 3;
+	
 	public MazePanel(Maze m){
 		maze = m;
 		setPreferredSize(new Dimension(m.getOptions().getSizeX()*Maze.CELL_WIDTH+1,
@@ -59,6 +63,18 @@ public class MazePanel extends JPanel {
 	public void resize(){
 		setPreferredSize(new Dimension(maze.getOptions().getSizeX()*Maze.CELL_WIDTH+1,
 				maze.getOptions().getSizeY()*Maze.CELL_HEIGHT+1));
+		repaint();
+	}
+	
+	public void setBlockView(boolean block){
+		blockView = block;
+	}
+	public void increaseViewSize(){ 
+		viewSize++;
+		repaint();
+	}
+	public void decreaseViewSize(){ 
+		viewSize--; 
 		repaint();
 	}
 	
@@ -86,6 +102,6 @@ public class MazePanel extends JPanel {
 		}
 		g2.setColor(Color.black);
 		
-		if(!allFinished) g2.fill(blackout);
+		if(!allFinished && blockView) g2.fill(blackout);
 	}
 }
