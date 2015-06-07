@@ -74,7 +74,7 @@ public class MazePanel extends JPanel {
 		repaint();
 	}
 	public void decreaseViewSize(){ 
-		viewSize--; 
+		if(viewSize > 1) viewSize--; 
 		repaint();
 	}
 	

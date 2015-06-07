@@ -23,6 +23,7 @@
  */
 package mazegame;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -67,7 +68,7 @@ public class MazeGenerator {
 		do {
 			Map<Direction, Cell> neighbors = currCell.getNeighbors();
 			Direction dir = Direction.values()[rand.nextInt(4)];
-			while((neighbors.get(dir) == null || neighbors.get(dir).visited) && !neighbors.isEmpty()) {
+			while(!neighbors.isEmpty() && (neighbors.get(dir) == null || neighbors.get(dir).visited)) {
 				neighbors.remove(dir);
 				dir = Direction.values()[rand.nextInt(4)];
 			}
@@ -84,6 +85,26 @@ public class MazeGenerator {
 	
 	private static void generatePrimMaze(Maze m){
 		System.out.println("Generating prim maze");
+		Random rand = new Random();
+		List<Cell> cells = new ArrayList();
+		
+		cells.add(m.getCell(rand.nextInt(m.getOptions().getSizeX()),
+				rand.nextInt(m.getOptions().getSizeY())));
+		while(!cells.isEmpty()){
+			Cell currCell = cells.get(rand.nextInt(cells.size()));
+			Map<Direction, Cell> neighbors = currCell.getNeighbors();
+			Direction dir = Direction.values()[rand.nextInt(4)];
+			while(!neighbors.isEmpty() && (neighbors.get(dir)==null || neighbors.get(dir).visited))
+			{
+				neighbors.remove(dir);
+				dir = Direction.values()[rand.nextInt(4)];
+			}
+			if(neighbors.isEmpty()) cells.remove(currCell);
+			else{
+				currCell.breakWall(dir);
+				cells.add(currCell.getNeighbor(dir));
+			}
+		}
 	}
 	
 	private static void generateWilsonMaze(Maze m){
@@ -107,7 +128,6 @@ public class MazeGenerator {
 				PathPoint pp = path.pop();
 				Cell c = m.getCell(pp.getPoint());
 				if(!c.visited) c.breakWall(pp.getDirection());
-				c.visited = true;
 			} while(!path.isEmpty());
 		} while(!m.getUnvisitedCells().isEmpty());
 		
