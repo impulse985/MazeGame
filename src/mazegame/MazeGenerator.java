@@ -23,11 +23,14 @@
  */
 package mazegame;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Stack;
 import mazegame.Maze.Cell;
 import mazegame.MazeOptions.Algorithm;
+import mazegame.player.Path;
+import mazegame.player.Path.PathPoint;
 
 /**
  * A static utility class to generate a maze on a given Maze object. The current
@@ -46,6 +49,9 @@ public class MazeGenerator {
 				break;
 			case PRIM:
 				generatePrimMaze(m);
+				break;
+			case WILSON:
+				generateWilsonMaze(m);
 				break;
 			default:
 				break;
@@ -76,5 +82,34 @@ public class MazeGenerator {
 		} while(!s.empty() && currCell != null);
 	}
 	
-	private static void generatePrimMaze(Maze m){}
+	private static void generatePrimMaze(Maze m){
+		System.out.println("Generating prim maze");
+	}
+	
+	private static void generateWilsonMaze(Maze m){
+		System.out.println("Generating wilson maze");
+		Random rand = new Random();
+		Path path = new Path();
+		
+		m.getCell(m.getOptions().getGoal()).visited = true;
+		do{
+			List<Cell> unvisited = m.getUnvisitedCells();
+			System.out.println(unvisited.size());
+			Cell currCell = unvisited.get(rand.nextInt(unvisited.size()));
+			do{
+				Direction dir = Direction.values()[rand.nextInt(4)];
+				if(currCell.hasNeighbor(dir)) {
+					path.push(currCell.getPos(),dir);
+					currCell = currCell.getNeighbor(dir);
+				}
+			} while(!currCell.visited);
+			do{
+				PathPoint pp = path.pop();
+				Cell c = m.getCell(pp.getPoint());
+				if(!c.visited) c.breakWall(pp.getDirection());
+				c.visited = true;
+			} while(!path.isEmpty());
+		} while(!m.getUnvisitedCells().isEmpty());
+		
+	}
 }

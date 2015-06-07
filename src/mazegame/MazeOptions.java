@@ -79,7 +79,7 @@ public class MazeOptions {
 	}
 	
 	public enum Algorithm {
-		DFS,PRIM;
+		DFS,PRIM,WILSON;
 		
 		@Override
 		public String toString(){
@@ -88,6 +88,8 @@ public class MazeOptions {
 					return "Depth-first Search";
 				case PRIM:
 					return "Prim's Algorithm";
+				case WILSON:
+					return "Wilson's Algorithm";
 				default:
 					return null;
 			}

@@ -33,8 +33,11 @@ import mazegame.Maze.Cell;
 import mazegame.Point;
 
 /**
- * A class to track a Player's path through the maze. Also tracks any paths the
- * Player backtracks from, displayed in a different color.
+ * A class to track a path through the maze. Also tracks any paths the
+ * Player backtracks from, displayed in a different color. If used to track
+ * an arbitrary path, use the push() method. If tracking a player's path, use
+ * the add() method, which checks if the player backtracks and adds it to the
+ * backtrack set.
  * @author Jeffery Thompson
  */
 public class Path {
@@ -46,6 +49,14 @@ public class Path {
 	
 	private int pathWidth = (Maze.CELL_WIDTH-1)/4;
 	
+	public Path(){
+		curPath = new Stack();
+		backtrack = new HashSet();
+		
+		pathColor = Color.black;
+		backtrackColor = Color.black;
+	}
+	
 	public Path(Color pc, Color btc){
 		curPath = new Stack();
 		backtrack = new HashSet();
@@ -54,6 +65,14 @@ public class Path {
 		backtrackColor = btc;
 	}
 	
+	/**
+	 * Adds a player's previous position to the path or adds it to the backtrack
+	 * list if the player went backwards. This method is used for player
+	 * movements. If using the Path class for maze generation or otherwise,
+	 * use push(), which can be used to add paths that backtrack on themselves.
+	 * @param p
+	 * @param dir 
+	 */
 	public void add(Point p, Direction dir){
 		if(!curPath.isEmpty() && p.getNeighbor(dir).equals(curPath.peek().getPoint())){
 			curPath.pop();
@@ -64,6 +83,18 @@ public class Path {
 			if(backtrack.contains(point)) backtrack.remove(point);
 			curPath.push(new PathPoint(p, dir));
 		}
+	}
+	
+	public void push(Point p, Direction dir){
+		curPath.push(new PathPoint(p,dir));
+	}
+	
+	public PathPoint pop(){
+		return curPath.pop();
+	}
+	
+	public boolean isEmpty(){
+		return curPath.isEmpty();
 	}
 	
 	public void paint(Graphics2D g){

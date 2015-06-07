@@ -140,6 +140,7 @@ public class MazeFrame extends JFrame {
 					NewMazeDialog dialog = new NewMazeDialog(MazeFrame.this,maze.getOptions());
 					if(dialog.showDialog() != null){
 						maze = new Maze(dialog.getOptions());
+						System.out.println(dialog.getOptions().getAlgorithm());
 						panel.setMaze(maze);
 						PlayerList.setMaze(maze);
 						panel.resize();

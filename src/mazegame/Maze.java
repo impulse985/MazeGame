@@ -25,6 +25,8 @@ package mazegame;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.EnumMap;
 import java.util.Map;
 import mazegame.MazeOptions.Algorithm;
@@ -51,7 +53,7 @@ public class Maze {
 			for(int j = 0; j < options.getSizeY(); j++)
 				grid[i][j] = new Cell(i, j);
 		
-		MazeGenerator.generateMaze(this, Algorithm.DFS);
+		MazeGenerator.generateMaze(this, options.getAlgorithm());
 	}
 	
 	public MazeOptions getOptions(){
@@ -76,6 +78,14 @@ public class Maze {
 	public Cell getCell(Point p){
 		if(p.x >= options.getSizeX() || p.y >= options.getSizeY() || p.x < 0 || p.y < 0) return null;
 		return grid[p.x][p.y];
+	}
+	
+	public List<Cell> getUnvisitedCells(){
+		List<Cell> unvisited = new ArrayList();
+		for(int i = 0; i < options.getSizeX(); i++)
+			for(int j = 0; j < options.getSizeY(); j++)
+				if(!grid[i][j].visited) unvisited.add(grid[i][j]);
+		return unvisited;
 	}
 	
 	public void paint(Graphics2D g){
@@ -149,6 +159,13 @@ public class Maze {
 				getNeighbor(dir).visited = true;
 			}
 			visited = true;
+		}
+		
+		@Override
+		public boolean equals(Object o){
+			if(this == o) return true;
+			if(o.getClass() != Cell.class) return false;
+			return ((Cell)o).pos.equals(this.pos);
 		}
 		
 		public void paint(Graphics2D g){

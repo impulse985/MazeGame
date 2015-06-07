@@ -134,6 +134,7 @@ public class NewMazeDialog extends JDialog {
 		JPanel algPanel = new JPanel();
 		algPanel.setBorder(new TitledBorder("Algorithm"));
 		algPanel.add(new JLabel("Algorithm:"));
+		algComboBox.setSelectedItem(options.getAlgorithm());
 		algPanel.add(algComboBox);
 		algComboBox.setActionCommand("Algorithm");
 		algComboBox.addActionListener(listener);

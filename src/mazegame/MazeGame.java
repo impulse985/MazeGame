@@ -35,6 +35,7 @@ import mazegame.gui.MazeFrame;
 public class MazeGame {
     public static void main(String[] args) {
 		MazeOptions options = new MazeOptions(21,21);
+		options.setAlgorithm(MazeOptions.Algorithm.WILSON);
 		options.setGoal(new Point(10,10));
 		Maze m = new Maze(options);
 		PlayerList.add(new Player(m,Color.red));
