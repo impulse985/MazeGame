@@ -44,7 +44,10 @@ import mazegame.player.Player;
 import mazegame.player.PlayerList;
 
 /**
- *
+ * A class for the main window of the application. The JFrame contains a menu
+ * bar for creating a new maze, restarting the current maze, making the maze
+ * view larger or smaller, and limiting the player's view. The JFrame also
+ * contains a MazePanel for displaying the maze and the players within.
  * @author Jeff
  */
 public class MazeFrame extends JFrame {
@@ -57,9 +60,9 @@ public class MazeFrame extends JFrame {
 	public MazeFrame(Maze m) {
 		maze = m;
 		panel = new MazePanel(m);
-		this.setContentPane(panel);
+		this.add(panel);
 		
-		this.setJMenuBar(createMenuBar());
+		createMenuBar();
 		this.addKeyListener(new KeyboardInput());
 		panel.addKeyListener(new KeyboardInput());
 		//this.setMinimumSize(new Dimension(300,300));
@@ -69,8 +72,12 @@ public class MazeFrame extends JFrame {
 		this.setVisible(true);
 		this.requestFocus();
 	}
-        
-	private JMenuBar createMenuBar(){
+	
+	/**
+	 * Initializes the components for the menu bar and adds it to the frame.
+	 * @return JMenuBar
+	 */
+	private void createMenuBar(){
 		JMenuBar bar = new JMenuBar();
 
 		JMenu maze = new JMenu("Maze");
@@ -114,7 +121,7 @@ public class MazeFrame extends JFrame {
 		
 		bar.add(maze);
 		bar.add(view);
-		return bar;
+		this.setJMenuBar(bar);
 	}
 	
 	public void resize(){
@@ -153,13 +160,11 @@ public class MazeFrame extends JFrame {
 					panel.repaint();
 					break;
 				case "Zoom in":
-					Maze.CELL_WIDTH *= 1.25;
-					Maze.CELL_HEIGHT *= 1.25;
+					Maze.CELL_SIZE += 4;
 					resize();
 					break;
 				case "Zoom out":
-					Maze.CELL_WIDTH /= 1.25;
-					Maze.CELL_HEIGHT /= 1.25;
+					Maze.CELL_SIZE -= 4;
 					resize();
 					break;
 				case "Block view":

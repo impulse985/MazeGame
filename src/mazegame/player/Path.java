@@ -47,7 +47,7 @@ public class Path {
 	private Color pathColor;
 	private Color backtrackColor;
 	
-	private int pathWidth = (Maze.CELL_WIDTH-1)/4;
+	private int pathWidth = (Maze.CELL_SIZE-1)/4;
 	
 	public Path(){
 		curPath = new Stack();
@@ -139,29 +139,31 @@ public class Path {
 		}
 		
 		public void paint(Graphics2D g){
-			g.fillRect(point.getX()*Maze.CELL_WIDTH + (Maze.CELL_WIDTH-pathWidth-1)/2+1,
-				   point.getY()*Maze.CELL_HEIGHT + (Maze.CELL_HEIGHT-pathWidth-1)/2+1,
+			//center of path point
+			g.fillRect(point.getX()*Maze.CELL_SIZE + (Maze.CELL_SIZE-pathWidth)/2,
+				   point.getY()*Maze.CELL_SIZE + (Maze.CELL_SIZE-pathWidth)/2,
 				   pathWidth, pathWidth);
+			//connecting section to next cell
 			switch(dir){
 				case NORTH:
-					g.fillRect(point.getX()*Maze.CELL_WIDTH + (Maze.CELL_WIDTH-pathWidth-1)/2+1,
-							point.getY()*Maze.CELL_HEIGHT - (Maze.CELL_HEIGHT-pathWidth-1)/2,
-							pathWidth, Maze.CELL_HEIGHT-pathWidth);
+					g.fillRect(point.getX()*Maze.CELL_SIZE + (Maze.CELL_SIZE-pathWidth)/2,
+							point.getY()*Maze.CELL_SIZE - (Maze.CELL_SIZE-pathWidth)/2-1,
+							pathWidth, Maze.CELL_SIZE-pathWidth);
 					break;
 				case SOUTH:
-					g.fillRect(point.getX()*Maze.CELL_WIDTH + (Maze.CELL_WIDTH-pathWidth-1)/2+1,
-							(point.getY()+1)*Maze.CELL_HEIGHT - (Maze.CELL_HEIGHT-pathWidth-1)/2,
-							pathWidth, Maze.CELL_HEIGHT-pathWidth);
+					g.fillRect(point.getX()*Maze.CELL_SIZE + (Maze.CELL_SIZE-pathWidth)/2,
+							(point.getY()+1)*Maze.CELL_SIZE - (Maze.CELL_SIZE-pathWidth)/2-1,
+							pathWidth, Maze.CELL_SIZE-pathWidth);
 					break;
 				case EAST:
-					g.fillRect((point.getX()+1)*Maze.CELL_WIDTH - (Maze.CELL_WIDTH-pathWidth-1)/2,
-							point.getY()*Maze.CELL_HEIGHT + (Maze.CELL_HEIGHT-pathWidth-1)/2 +1,
-							Maze.CELL_WIDTH-pathWidth, pathWidth);
+					g.fillRect((point.getX()+1)*Maze.CELL_SIZE - (Maze.CELL_SIZE-pathWidth)/2-1,
+							point.getY()*Maze.CELL_SIZE + (Maze.CELL_SIZE-pathWidth)/2,
+							Maze.CELL_SIZE-pathWidth, pathWidth);
 					break;
 				case WEST:
-					g.fillRect(point.getX()*Maze.CELL_WIDTH - (Maze.CELL_WIDTH-pathWidth-1)/2,
-							point.getY()*Maze.CELL_HEIGHT + (Maze.CELL_HEIGHT-pathWidth-1)/2 + 1,
-							Maze.CELL_WIDTH-pathWidth, pathWidth);
+					g.fillRect(point.getX()*Maze.CELL_SIZE - (Maze.CELL_SIZE-pathWidth)/2-1,
+							point.getY()*Maze.CELL_SIZE + (Maze.CELL_SIZE-pathWidth)/2,
+							Maze.CELL_SIZE-pathWidth, pathWidth);
 					break;
 			}
 		}

@@ -25,16 +25,28 @@ package mazegame;
 
 
 /**
- *
+ * A class that stores options for a maze, including size, start and end points,
+ * and a generation algorithm. A MazeOptions object must be constructed with
+ * at least the maze's size. If you would like to change the other options,
+ * you may then set the individual parameters.
  * @author Jeffery Thompson
  */
 public class MazeOptions {
-	private int sizeX, sizeY;
+	private final int sizeX, sizeY;
 	private Algorithm algorithm;
 	
 	private Point start;
 	private Point goal;
 	
+	/**
+	 * Creates a new MazeOptions with the specified maze size. The maze size
+	 * is required. The other options may be set with their specific methods.
+	 * The start Point defaults to the top left of the maze (0,0). The goal
+	 * Point defaults to the bottom right of the maze (x-1,y-1). The default
+	 * maze generation algorithm is DFS.
+	 * @param x
+	 * @param y 
+	 */
 	public MazeOptions(int x, int y){
 		sizeX = x;
 		sizeY = y;
@@ -42,23 +54,50 @@ public class MazeOptions {
 		start = new Point(0,0);
 		goal = new Point(x-1,y-1);
 	}
+	/**
+	 * Gets the horizontal size of the maze.
+	 * @return horizontal size
+	 */
 	public int getSizeX(){
 		return sizeX;
 	}
+	
+	/**
+	 * Gets the vertical size of the maze
+	 * @return vertical size
+	 */
 	public int getSizeY(){
 		return sizeY;
 	}
 	
+	/**
+	 * Gets the Algorithm used to generate the maze.
+	 * @return generation Algorithm
+	 */
 	public Algorithm getAlgorithm(){
 		return algorithm;
 	}
+	/**
+	 * Sets the Algorithm used to generate the maze.
+	 * @param a Algorithm to generate maze
+	 */
 	public void setAlgorithm(Algorithm a){
 		algorithm = a;
 	}
 	
+	/**
+	 * Gets the starting Point of the maze. This is the recommended starting
+	 * point. Players may individually set their own starting positions.
+	 * @return start Point of maze
+	 */
 	public Point getStart(){
 		return start;
 	}
+	/**
+	 * Sets the starting Point of the maze. This is the recommended starting
+	 * point. Players may individually set their own starting positions.
+	 * @param p start Point of the maze
+	 */
 	public void setStart(Point p){
 		start = p;
 		if(start.x >= sizeX) start.x = sizeX-1;
@@ -67,9 +106,19 @@ public class MazeOptions {
 		if(start.y < 0) start.y = 0;
 	}
 	
+	/**
+	 * Gets the goal Point of the maze. This is where players will finish the 
+	 * maze.
+	 * @return goal Point of the maze
+	 */
 	public Point getGoal(){
 		return goal;
 	}
+	/**
+	 * Sets the goal Point of the maze. This is where players will finish the
+	 * Maze.
+	 * @param p 
+	 */
 	public void setGoal(Point p){
 		goal = p;
 		if(goal.x >= sizeX) goal.x = sizeX-1;
@@ -78,8 +127,27 @@ public class MazeOptions {
 		if(goal.y < 0) goal.y = 0;
 	}
 	
+	/**
+	 * An enumeration for the different maze generation algorithms.
+	 */
 	public enum Algorithm {
-		DFS,PRIM,WILSON;
+		/**
+		 * A generation algorithm with a high "river" factor. Long, winding
+		 * paths with little branching. These mazes take a long time to solve
+		 * and will often have the user backtracking a lot from dead ends.
+		 */
+		DFS,
+		/**
+		 * A generation algorithm with a low "river" factor. Lots of short
+		 * branches makes for a relatively easy maze.
+		 */
+		PRIM,
+		/**
+		 * A generation algorithm that generates all possible mazes with equal
+		 * probability. Since mazes with a lower "river" factor are more common,
+		 * this algorithm tends to create lower "river" mazes.
+		 */
+		WILSON;
 		
 		@Override
 		public String toString(){

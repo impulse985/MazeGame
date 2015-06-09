@@ -29,7 +29,6 @@ import java.time.Duration;
 import java.time.Instant;
 import mazegame.Direction;
 import mazegame.Maze;
-import mazegame.Maze.Cell;
 import mazegame.Point;
 
 /**
@@ -179,12 +178,12 @@ public class Player {
 		path.paint(g);
 		
 		g.setColor(playerColor);
-		g.fillRect(start.getX()*Maze.CELL_WIDTH+1, start.getY()*Maze.CELL_HEIGHT+1, 
-				Maze.CELL_WIDTH-1, Maze.CELL_HEIGHT-1);
+		g.fillRect(start.getX()*Maze.CELL_SIZE+1, start.getY()*Maze.CELL_SIZE+1, 
+				Maze.CELL_SIZE-2, Maze.CELL_SIZE-2);
 		
 		g.setColor(playerColor);
-		g.fillRect(pos.getX()*Maze.CELL_WIDTH + 3,
-				pos.getY()*Maze.CELL_HEIGHT + 3,
-				Maze.CELL_WIDTH -5, Maze.CELL_HEIGHT-5);
+		g.fillRect(pos.getX()*Maze.CELL_SIZE + 3,
+				pos.getY()*Maze.CELL_SIZE + 3,
+				Maze.CELL_SIZE -6, Maze.CELL_SIZE-6);
 	}
 }

@@ -48,8 +48,8 @@ public class MazePanel extends JPanel {
 	
 	public MazePanel(Maze m){
 		maze = m;
-		setPreferredSize(new Dimension(m.getOptions().getSizeX()*Maze.CELL_WIDTH+1,
-				m.getOptions().getSizeY()*Maze.CELL_HEIGHT+1));
+		setPreferredSize(new Dimension(m.getOptions().getSizeX()*Maze.CELL_SIZE+1,
+				m.getOptions().getSizeY()*Maze.CELL_SIZE+1));
 	}
 	
 	public void restart(){
@@ -61,8 +61,8 @@ public class MazePanel extends JPanel {
 	}
 	
 	public void resize(){
-		setPreferredSize(new Dimension(maze.getOptions().getSizeX()*Maze.CELL_WIDTH+1,
-				maze.getOptions().getSizeY()*Maze.CELL_HEIGHT+1));
+		setPreferredSize(new Dimension(maze.getOptions().getSizeX()*Maze.CELL_SIZE+1,
+				maze.getOptions().getSizeY()*Maze.CELL_SIZE+1));
 		repaint();
 	}
 	
@@ -85,15 +85,15 @@ public class MazePanel extends JPanel {
 		maze.paint(g2);
 		
 		Area blackout = new Area(new Rectangle2D.Double(0,0,
-				Maze.CELL_WIDTH*maze.getOptions().getSizeX(),
-				Maze.CELL_WIDTH*maze.getOptions().getSizeY()));
+				Maze.CELL_SIZE*maze.getOptions().getSizeX(),
+				Maze.CELL_SIZE*maze.getOptions().getSizeY()));
 		boolean allFinished = true;
 		for(Player p : PlayerList.getPlayers()) {
 			p.paint(g2);
 			Ellipse2D view = new Ellipse2D.Double(
-					(p.getPos().getX() - viewSize)*Maze.CELL_WIDTH+Maze.CELL_WIDTH/2, 
-					(p.getPos().getY() - viewSize)*Maze.CELL_HEIGHT+Maze.CELL_HEIGHT/2,
-					2*viewSize*Maze.CELL_WIDTH, 2*viewSize*Maze.CELL_HEIGHT);
+					(p.getPos().getX() - viewSize)*Maze.CELL_SIZE+Maze.CELL_SIZE/2, 
+					(p.getPos().getY() - viewSize)*Maze.CELL_SIZE+Maze.CELL_SIZE/2,
+					2*viewSize*Maze.CELL_SIZE, 2*viewSize*Maze.CELL_SIZE);
 			Area viewArea = new Area(view);
 			if(!p.hasFinished()) {
 				blackout.subtract(viewArea);
